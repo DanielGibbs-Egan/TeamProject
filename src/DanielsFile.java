@@ -1,11 +1,4 @@
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 
 public class DanielsFile {
 	public static int a = 1;
@@ -26,10 +19,10 @@ public class DanielsFile {
 		
 		// create a new window
 		Window window = new Window();
-		window.setBackground(Color.WHITE);
-		
+		window.setBackgroundColor(Color.DARK_GRAY);
 		window.addDialogue("Hello World!, Dialogue Text Box Testing!");	
 		window.addDialogue("Goodbye!");
+		window.addDialogue("");
 	}
 
 	
