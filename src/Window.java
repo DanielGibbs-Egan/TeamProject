@@ -1,56 +1,87 @@
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Rectangle2D;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
-
-@SuppressWarnings("serial")
 public class Window extends JFrame {
+	
+	// add a serialVersionUID to supress warnings
+	private static final long serialVersionUID = 1L;
 
-	private int bottomOffset = 60;
+	/* Helper Classes */
+	
+	public class ButtonInfo {
+		public boolean isLeftMouseDown;
+		public boolean leftMouseClicked;
+		public boolean canLeftMouseClick;
+		
+		public ButtonInfo() {
+			isLeftMouseDown = false;
+			leftMouseClicked = false;
+			canLeftMouseClick = false;
+		}
+	}
+	
+	public class WindowUpdates implements ComponentListener {
 
-	boolean isLeftMouseDown = false;
-	boolean leftMouseClicked = false;
-
-	long lastLeftMouseDown = System.currentTimeMillis();
-	long lastLeftMouseClick = System.currentTimeMillis();
+		public void componentHidden(ComponentEvent e) {}
+		public void componentMoved(ComponentEvent e) {}
+		public void componentResized(ComponentEvent e) {
+			currentPage.update(window);
+		}
+		public void componentShown(ComponentEvent e) {}
+		
+	}
 	
 	private class MouseUpdates implements MouseListener {
-	
 
+		Timer clickTimer = new Timer();
+		
 		@Override
 		public void mouseClicked(MouseEvent e) {}
 		public void mousePressed(MouseEvent e) {
 			// if the button pressed is the left mouse button 
 			if (e.getButton() == 1) {
-				lastLeftMouseDown = System.currentTimeMillis();
-				if( e.getPoint().y > textbox.getLocation().y+bottomOffset/2) {
-					isLeftMouseDown = true; // update the variable
-					bar.setBackground(Color.LIGHT_GRAY);
-				}
+					buttonInfo.isLeftMouseDown = true; // update the variable
+					
+					buttonInfo.canLeftMouseClick = true;
+					clickTimer.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							buttonInfo.canLeftMouseClick = false;
+						}
+					}, 220);
+					
 			}
 		}
 		public void mouseReleased(MouseEvent e) {
 		
 			// if the left mouse button is down and the 
 			// button released was the left mouse button
-			if (isLeftMouseDown && e.getButton() == 1) {
-				//System.out.println(e.getPoint());
-				//System.out.println("click!"); // print "click!"
-				if (lastLeftMouseDown  + 250 > System.currentTimeMillis()) {
-					leftMouseClicked = true;
-					lastLeftMouseClick = System.currentTimeMillis();
-				}
-				isLeftMouseDown = false; // The left mouse button has been released
-				updateBarColor(e);
+			if (buttonInfo.isLeftMouseDown && e.getButton() == 1) {
+				if (buttonInfo.canLeftMouseClick) {
+					buttonInfo.leftMouseClicked = true;
+					clickTimer.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							buttonInfo.leftMouseClicked = false;
+						}
+					}, 10);
+					
+				} 
+				buttonInfo.isLeftMouseDown = false; // The left mouse button has been released
+				//updateBarColor(e);
 			}
 		}
 		public void mouseEntered(MouseEvent e) {}
@@ -58,48 +89,30 @@ public class Window extends JFrame {
 		
 	}
 	
-	private void updateBarColor(MouseEvent e) {
-		if (e.getPoint().y > textbox.getLocation().y+bottomOffset/2) {
-			bar.setBackground(Color.WHITE);
-		} else {
-			bar.setBackground(Color.BLACK);
-		}
-	}
-	
-	private class MouseMoveUpdates implements MouseMotionListener {
+	private class MouseMovementUpdates implements MouseMotionListener {
 
 		@Override
 		public void mouseDragged(MouseEvent e) {}
 		public void mouseMoved(MouseEvent e) {
-			updateBarColor(e);
+			currentPage.mouseMovement(e);
 		}
 		
 	}
 	
-	private class WindowUpdates implements ComponentListener{
-
-		@Override
-		public void componentResized(ComponentEvent e) {
-			textbox.setBounds(window.getBounds());
-			
-			Dimension p = window.getSize();
-			//bottomBarHeight = 3*window.getWidth()/50;
-			textbox.setBounds(0, p.height*5/9-bottomOffset, p.width, p.height*4/9); // set the labels size
-			bar.setBounds(0, p.height-bottomOffset-1, p.width-bottomOffset/4, bottomOffset/3+2); // set the labels size
-		}
-		public void componentMoved(ComponentEvent e) {}
-		public void componentShown(ComponentEvent e) {}
-		public void componentHidden(ComponentEvent e) {}
-		
-	}
+		/* Variables */
+	ButtonInfo buttonInfo = new ButtonInfo(); // stores info about the mouse
 	
-	private Window window = this;
-	private JLabel frame;
-	private JLabel textbox;
-	JLabel bar;
+	Window window; // this object
 	
-	//private Queue<String> queue = new qu<>();
+	Page currentPage; // the currently open page
+	
+	Page mainMenu; // the game page
 
+	Page gamePage; // the game page
+	DialogueBox dialogueBox; // the text box
+
+	/* Methods */
+	
 	public void delay(int timeMS) {
 		try {
 			Thread.sleep(timeMS);
@@ -108,90 +121,107 @@ public class Window extends JFrame {
 		}
 	}
 	
-	public void addDialogue(String text, int timeBetweenLettersMS, int timeAfterFinishedMS) {
-		
-		String[] words = text.split(" ");
-		text = "";
-		
-		int length = 0;
-		for (String word: words) {
-			if (length + word.length() < 68/1000*window.getWidth()) {
-				text += " " + word;
-				length += word.length();
-			} else {
-				text += " " + word;
-				length = 0;
-			}
-		}
-		
-		for (int i = 0; i <= text.length(); i++) {
-			textbox.setText("<html>" + text.substring(0, i) + "</html>");
-			delay(timeBetweenLettersMS/((isLeftMouseDown)? 10:1));
-		}
-		while (!(leftMouseClicked && lastLeftMouseClick + 100 > System.currentTimeMillis())) {
-			delay(1);
-		}
-		leftMouseClicked = false;
+	public boolean getLeftMouseDown() {
+		return buttonInfo.isLeftMouseDown;
 	}
 	
-	public void addDialogue(String text) {
-		addDialogue(text, 100, 300);
+	public void setCurrentPage(Page page) {
+		
+		Page oldPage = currentPage;
+		if (oldPage != null) {
+			oldPage.getParent().remove(oldPage);;
+			oldPage.update(window);
+		}
+		this.currentPage = page;
+		window.add(currentPage);
+		currentPage.update(window);
+		window.repaint();
+		System.out.println("currentPage: "+currentPage);
+		
+		
 	}
 	
-	public void setBackgroundColor(Color c) {
-		frame.setBackground(c);
-	}
+	/* Contructors */
 	
 	public Window() {
 		
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(1000,1000);
+		window = this;
+		
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
 		this.setVisible(true);
+		this.setSize(500,500);
+		this.setLocationRelativeTo(null);
 		
+		mainMenu = new Page(this);
+		mainMenu.setOpaque(true);
+		mainMenu.setBackground(Color.BLACK);
+		mainMenu.update(window);
+		currentPage = mainMenu;
+		window.add(mainMenu);
 		
-		// create the main frame for the window
-		frame = new JLabel();
-		frame.setBackground(Color.WHITE);
-		frame.setOpaque(true);
+		gamePage = new Page(this);
+		gamePage.setOpaque(true);
+		gamePage.setBackground(Color.GRAY);
+		gamePage.update(window);
 		
-		this.add(frame);
+		JButton b = new JButton();
+		mainMenu.add(b);
+		b.setBounds(0, 0, 100, 100);
+		b.setText("Start");
+		b.addMouseListener(new MouseListener() {
+			
+			boolean isDown = false;
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (isDown) {
+					setCurrentPage(gamePage);
+				}
+				isDown = false;
+			}
+			public void mousePressed(MouseEvent e) {
+				isDown = true;
+			}
+			public void mouseExited(MouseEvent e) {
+				isDown = false;
+			}
+			public void mouseEntered(MouseEvent e) {}
+			public void mouseClicked(MouseEvent e) {}
+		});
 		
-		// add the main text box
-		textbox = new JLabel();
-		textbox.setBackground(Color.BLACK);
-		textbox.setOpaque(true);
+		JLabel hoverBar = new JLabel();
+		hoverBar.setBackground(Color.WHITE);
+		hoverBar.setOpaque(true);
+		hoverBar.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.BLACK));
 		
-		//textbox.setText("Hello World!");
-		textbox.setFont(new Font("Monospaced", 1, 24));
-		textbox.setForeground(Color.WHITE);
+		dialogueBox = new DialogueBox(this, gamePage, hoverBar);
 		
-		textbox.setVerticalAlignment(1);
-		textbox.setBorder(BorderFactory.createMatteBorder( 10, 15, 15, 15, Color.BLACK));
+		gamePage.setBackground(Color.GRAY);
 		
-		// interaction bar
-		bar = new JLabel();
-		bar.setBackground(Color.BLACK);
-		bar.setOpaque(true);
-		bar.setBorder(BorderFactory.createLineBorder(Color.BLACK, bottomOffset*3/21));
+		Layout layout = new Layout(true);
+		layout.add(dialogueBox, new Rectangle2D.Double(0,0,1,.5), new Rectangle(0,0,0,0));
+		layout.add(hoverBar, new Rectangle2D.Double(0,0,1,0), new Rectangle(0,0,0,25));
 		
-		
-		Dimension p = this.getSize();
-		textbox.setBounds(0, p.height*2/3-bottomOffset, p.width, p.height/3); // set the labels size
-		bar.setBounds(0, p.height-bottomOffset*2, p.width-bottomOffset/5, bottomOffset*4/5); // set the labels size
-		
-		frame.add(textbox);
-		frame.add(bar);
-		
+		gamePage.layout = layout;
 
-		// create a mouse listener for the window
-		MouseListener mouseListener = new MouseUpdates();
-		this.addMouseListener(mouseListener);
-		
-		WindowUpdates windowListener = new WindowUpdates();
-		this.addComponentListener(windowListener);
-		
-		MouseMoveUpdates mouseMovementListener = new MouseMoveUpdates();
-		this.addMouseMotionListener(mouseMovementListener);
+		gamePage.add(dialogueBox);
+		gamePage.add(hoverBar);
+
+		Thread t = new Thread(
+			new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					window.addComponentListener(new WindowUpdates());
+					window.addMouseListener(new MouseUpdates());
+					window.addMouseMotionListener(new MouseMovementUpdates());
+				}
+			}
+		);
+		t.start();
+		setCurrentPage(mainMenu);
 		
 	}
 	

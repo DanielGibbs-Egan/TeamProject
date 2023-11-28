@@ -1,6 +1,7 @@
 import java.awt.Color;
 
 public class DanielsFile {
+	
 	public static int a = 1;
 	public static int randomInt(int low, int high) {
 		                                 // 5 - 1       
@@ -10,7 +11,6 @@ public class DanielsFile {
 		
 	}
 	
-	
 	public static void main(String[] args) {
 		// Hello World!
 		// Prints my Name!
@@ -19,10 +19,15 @@ public class DanielsFile {
 		
 		// create a new window
 		Window window = new Window();
-		window.setBackgroundColor(Color.DARK_GRAY);
-		window.addDialogue("Hello World!, Dialogue Text Box Testing!");	
-		window.addDialogue("Goodbye!");
-		window.addDialogue("");
+		window.dialogueBox.addDialogue("Hello World!, Dialogue Text Box Testing!");	
+		
+		String[] questions = {"A","B","C"};
+		Integer selection = window.dialogueBox.addQuestionaire("A, B, or C", window.gamePage.layout, questions);
+		
+		window.dialogueBox.addDialogue("You Chose: " + questions[selection]);
+		
+		window.dialogueBox.addDialogue("Goodbye!");
+		window.dialogueBox.addDialogue("");
 	}
 
 	
