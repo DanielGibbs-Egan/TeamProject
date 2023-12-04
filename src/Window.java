@@ -20,10 +20,11 @@ import javax.swing.JLabel;
  * Window() creates a window for visualizing 
  * the game.
  *
- * 
+ * Helper Classes
  *
+ * Variables
  *
- *
+ * Constructors
  *
  */
 
@@ -112,7 +113,8 @@ public class Window extends JFrame {
 		
 	}
 	
-		/* Variables */
+	/* Variables */
+	
 	ButtonInfo buttonInfo = new ButtonInfo(); // stores info about the mouse
 	
 	Window window; // this object
