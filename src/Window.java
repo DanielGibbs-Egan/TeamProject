@@ -14,6 +14,19 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+/*
+ * Daniel Gibbs-Egan
+ *
+ * Window() creates a window for visualizing 
+ * the game.
+ *
+ * 
+ *
+ *
+ *
+ *
+ */
+
 public class Window extends JFrame {
 	
 	// add a serialVersionUID to supress warnings
