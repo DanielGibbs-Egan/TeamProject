@@ -1,5 +1,3 @@
-import java.awt.Color;
-
 public class DanielsFile {
 	
 	public static int a = 1;
@@ -26,8 +24,11 @@ public class DanielsFile {
 		
 		window.dialogueBox.addDialogue("You Chose: " + questions[selection]);
 		
+		System.out.println(window.dialogueBox.addQuestionaire("a,b,c, or d", window.gamePage.layout, "a", "b", "c", "d"));;
+		
 		window.dialogueBox.addDialogue("Goodbye!");
-		window.dialogueBox.addDialogue("");
+		
+		window.setCurrentPage(window.mainMenu);
 	}
 
 	
