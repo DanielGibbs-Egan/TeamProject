@@ -21,9 +21,10 @@ public class DialogueBox extends JLabel {
 	
 	/* Helper Classes */
 	
+	// Question Button 
 	public class Question extends JButton {
 		
-		// appease the warning god
+		// add a serialVersionUID to supress warnings
 		private static final long serialVersionUID = 1L;
 
 		public void destroy() {
@@ -32,17 +33,19 @@ public class DialogueBox extends JLabel {
 		}
 		
 		public Question(String s, int index) {
+			
 			super(s);
 
 			this.removeMouseListener(this.getMouseListeners()[0]);
 
 			this.addMouseListener(new ButtonListener(index));
 			
-			this.setOpaque(true);
+			this.setOpaque(true); // Make the button background visible
 
-			this.setForeground(Color.WHITE);
-			
+			this.setForeground(Color.WHITE); 
 			this.setBackground(Color.BLACK);
+			
+			// add a 
 			this.setBorder(BorderFactory.createMatteBorder(2,4,2,4,Color.WHITE));
 		}
 		
@@ -179,8 +182,11 @@ public class DialogueBox extends JLabel {
 		layout.update(window);
 		
 		askingQuestion = false;
+
+		int localIndexReturn = indexReturn;
+		indexReturn = -1;
 		
-		return indexReturn;
+		return localIndexReturn;
 		
 		
 	}
