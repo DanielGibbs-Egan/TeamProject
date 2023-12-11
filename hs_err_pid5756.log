@@ -1,0 +1,258 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 32744 bytes for ChunkPool::allocate
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Zero Based Compressed Oops mode in which the Java heap is
+#     placed in the first 32GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 32GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (allocation.cpp:272), pid=5756, tid=0x00000000000073d0
+#
+# JRE version: OpenJDK Runtime Environment (8.0_382-b05) (build 1.8.0_382-b05)
+# Java VM: OpenJDK 64-Bit Server VM (25.382-b05 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000001274537f800):  JavaThread "C1 CompilerThread3" daemon [_thread_in_native, id=29648, stack(0x0000000d75f00000,0x0000000d76000000)]
+
+Stack: [0x0000000d75f00000,0x0000000d76000000]
+[error occurred during error reporting (printing stack bounds), id 0xc0000005]
+
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+
+
+Current CompileTask:
+C1:5199096 1267       3       java.util.Arrays::binarySearch0 (95 bytes)
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x00000127480bf000 JavaThread "AWT-EventQueue-0" [_thread_blocked, id=40892, stack(0x0000000d74b00000,0x0000000d74c00000)]
+  0x00000127480ce800 JavaThread "AWT-Shutdown" [_thread_blocked, id=13832, stack(0x0000000d74a00000,0x0000000d74b00000)]
+  0x00000127482ac800 JavaThread "D3D Screen Updater" daemon [_thread_blocked, id=12352, stack(0x0000000d76850000,0x0000000d76950000)]
+  0x0000012747d68800 JavaThread "AWT-Windows" daemon [_thread_in_native, id=19296, stack(0x0000000d76400000,0x0000000d76500000)]
+  0x0000012747d5f800 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=29364, stack(0x0000000d76200000,0x0000000d76300000)]
+  0x000001274783a800 JavaThread "Service Thread" daemon [_thread_blocked, id=19548, stack(0x0000000d76000000,0x0000000d76100000)]
+=>0x000001274537f800 JavaThread "C1 CompilerThread3" daemon [_thread_in_native, id=29648, stack(0x0000000d75f00000,0x0000000d76000000)]
+  0x0000012745373000 JavaThread "C2 CompilerThread2" daemon [_thread_blocked, id=7160, stack(0x0000000d75e00000,0x0000000d75f00000)]
+  0x000001274535d800 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=3564, stack(0x0000000d75d00000,0x0000000d75e00000)]
+  0x0000012745362000 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=17384, stack(0x0000000d75c00000,0x0000000d75d00000)]
+  0x0000012745356000 JavaThread "Attach Listener" daemon [_thread_blocked, id=23796, stack(0x0000000d75b00000,0x0000000d75c00000)]
+  0x0000012745353000 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=23780, stack(0x0000000d75a00000,0x0000000d75b00000)]
+  0x000001274532a000 JavaThread "Finalizer" daemon [_thread_blocked, id=1308, stack(0x0000000d75900000,0x0000000d75a00000)]
+  0x0000012745323000 JavaThread "Reference Handler" daemon [_thread_blocked, id=4888, stack(0x0000000d75800000,0x0000000d75900000)]
+  0x000001272a524000 JavaThread "main" [_thread_blocked, id=20060, stack(0x0000000d74c00000,0x0000000d74d00000)]
+
+Other Threads:
+  0x00000127452fa000 VMThread [stack: 0x0000000d75700000,0x0000000d75800000] [id=17656]
+  0x000001274783d000 WatcherThread [stack: 0x0000000d76100000,0x0000000d76200000] [id=15728]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+heap address: 0x00000006c1000000, size: 4080 MB, Compressed Oops mode: Zero based, Oop shift amount: 3
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 3
+Compressed class space size: 1073741824 Address: 0x00000007c0000000
+
+Heap:
+ PSYoungGen      total 76288K, used 19422K [0x000000076b000000, 0x0000000770500000, 0x00000007c0000000)
+  eden space 65536K, 29% used [0x000000076b000000,0x000000076c2f7bd8,0x000000076f000000)
+  from space 10752K, 0% used [0x000000076fa80000,0x000000076fa80000,0x0000000770500000)
+  to   space 10752K, 0% used [0x000000076f000000,0x000000076f000000,0x000000076fa80000)
+ ParOldGen       total 175104K, used 0K [0x00000006c1000000, 0x00000006cbb00000, 0x000000076b000000)
+  object space 175104K, 0% used [0x00000006c1000000,0x00000006c1000000,0x00000006cbb00000)
+ Metaspace       used 11260K, capacity 11462K, committed 11648K, reserved 1058816K
+  class space    used 1313K, capacity 1385K, committed 1408K, reserved 1048576K
+
+Card table byte_map: [0x000001273b370000,0x000001273bb70000] byte_map_base: 0x0000012737d68000
+
+Marking Bits: (ParMarkBitMap*) 0x000000006afc6850
+ Begin Bits: [0x000001273c0c0000, 0x0000012740080000)
+ End Bits:   [0x0000012740080000, 0x0000012744040000)
+
+Polling page: 0x000001272bf80000
+
+CodeCache: size=245760Kb used=4212Kb max_used=4212Kb free=241547Kb
+ bounds [0x000001272bfb0000, 0x000001272c3e0000, 0x000001273afb0000]
+ total_blobs=1745 nmethods=1241 adapters=417
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 93.384 Thread 0x000001274537f800 nmethod 1259 0x000001272c3cd6d0 code [0x000001272c3cdae0, 0x000001272c3d03d0]
+Event: 150.519 Thread 0x0000012745362000 1260 %     4       Window::addDialogue @ 203 (236 bytes)
+Event: 150.521 Thread 0x0000012745362000 nmethod 1260% 0x000001272c3b3e50 code [0x000001272c3b3fa0, 0x000001272c3b4088]
+Event: 5198.588 Thread 0x000001274537f800 1261       3       java.util.concurrent.ConcurrentHashMap$Node::<init> (26 bytes)
+Event: 5198.589 Thread 0x000001274537f800 nmethod 1261 0x000001272c3b3a10 code [0x000001272c3b3b60, 0x000001272c3b3d78]
+Event: 5198.590 Thread 0x000001274537f800 1263       3       jdk.internal.org.objectweb.asm.Item::<init> (5 bytes)
+Event: 5198.590 Thread 0x000001274537f800 nmethod 1263 0x000001272c3b3650 code [0x000001272c3b37a0, 0x000001272c3b3958]
+Event: 5199.090 Thread 0x000001274537f800 1264       3       sun.java2d.loops.GraphicsPrimitiveMgr$2::compare (39 bytes)
+Event: 5199.092 Thread 0x000001274537f800 nmethod 1264 0x000001272c3b4750 code [0x000001272c3b48c0, 0x000001272c3b4d58]
+Event: 5199.092 Thread 0x000001274537f800 1267       3       java.util.Arrays::binarySearch0 (95 bytes)
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (10 events):
+Event: 0.606 Thread 0x000001272a524000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x000001272c16c8b4 method=javax.swing.text.html.CSSParser.readChar()I @ 21
+Event: 0.606 Thread 0x000001272a524000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x000001272c16c8b4 method=javax.swing.text.html.CSSParser.readChar()I @ 21
+Event: 0.606 Thread 0x000001272a524000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x000001272c16c8b4 method=javax.swing.text.html.CSSParser.readChar()I @ 21
+Event: 0.619 Thread 0x000001272a524000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x000001272c0c9150 method=java.lang.String.equals(Ljava/lang/Object;)Z @ 8
+Event: 0.620 Thread 0x000001272a524000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x000001272c0c9150 method=java.lang.String.equals(Ljava/lang/Object;)Z @ 8
+Event: 0.620 Thread 0x000001272a524000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x000001272c0c9150 method=java.lang.String.equals(Ljava/lang/Object;)Z @ 8
+Event: 0.623 Thread 0x000001272a524000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x000001272c0c9150 method=java.lang.String.equals(Ljava/lang/Object;)Z @ 8
+Event: 8.433 Thread 0x0000012748239800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000001272c3beec4 method=java.awt.EventQueue.getPriority(Ljava/awt/AWTEvent;)I @ 22
+Event: 8.437 Thread 0x0000012748239800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000001272c36f1b0 method=sun.awt.AWTAutoShutdown.isReadyToShutdown()Z @ 16
+Event: 8.437 Thread 0x0000012747d68800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000001272c0de35c method=sun.awt.AWTAutoShutdown.isReadyToShutdown()Z @ 16
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (10 events):
+Event: 0.036 Thread 0x000001272a524000 Exception <a 'java/lang/NoSuchMethodError': Method sun.misc.Unsafe.prefetchRead(Ljava/lang/Object;J)V name or signature does not match> (0x000000076b008588) thrown at [C:\wsjdk\Corretto8Src\installers\windows\zip\corretto-build\buildRoot\hotspot\src\share
+Event: 0.125 Thread 0x000001272a524000 Exception <a 'java/security/PrivilegedActionException'> (0x000000076b09f468) thrown at [C:\wsjdk\Corretto8Src\installers\windows\zip\corretto-build\buildRoot\hotspot\src\share\vm\prims\jvm.cpp, line 1514]
+Event: 0.125 Thread 0x000001272a524000 Exception <a 'java/security/PrivilegedActionException'> (0x000000076b09f678) thrown at [C:\wsjdk\Corretto8Src\installers\windows\zip\corretto-build\buildRoot\hotspot\src\share\vm\prims\jvm.cpp, line 1514]
+Event: 0.126 Thread 0x000001272a524000 Exception <a 'java/security/PrivilegedActionException'> (0x000000076b0a4000) thrown at [C:\wsjdk\Corretto8Src\installers\windows\zip\corretto-build\buildRoot\hotspot\src\share\vm\prims\jvm.cpp, line 1514]
+Event: 0.126 Thread 0x000001272a524000 Exception <a 'java/security/PrivilegedActionException'> (0x000000076b0a4210) thrown at [C:\wsjdk\Corretto8Src\installers\windows\zip\corretto-build\buildRoot\hotspot\src\share\vm\prims\jvm.cpp, line 1514]
+Event: 0.133 Thread 0x000001272a524000 Exception <a 'java/io/FileNotFoundException'> (0x000000076b0a64f0) thrown at [C:\wsjdk\Corretto8Src\installers\windows\zip\corretto-build\buildRoot\hotspot\src\share\vm\prims\jni.cpp, line 709]
+Event: 0.169 Thread 0x000001272a524000 Exception <a 'java/lang/NoSuchFieldError': method resolution failed> (0x000000076b2bd900) thrown at [C:\wsjdk\Corretto8Src\installers\windows\zip\corretto-build\buildRoot\hotspot\src\share\vm\prims\methodHandles.cpp, line 1194]
+Event: 0.171 Thread 0x000001272a524000 Exception <a 'java/lang/NoSuchFieldError': method resolution failed> (0x000000076b2ca958) thrown at [C:\wsjdk\Corretto8Src\installers\windows\zip\corretto-build\buildRoot\hotspot\src\share\vm\prims\methodHandles.cpp, line 1194]
+Event: 0.211 Thread 0x000001272a524000 Exception <a 'java/lang/ClassNotFoundException': sun/dc/DuctusRenderingEngine> (0x000000076b360fb8) thrown at [C:\wsjdk\Corretto8Src\installers\windows\zip\corretto-build\buildRoot\hotspot\src\share\vm\classfile\systemDictionary.cpp, line 217]
+Event: 0.225 Thread 0x000001272a524000 Exception <a 'java/io/FileNotFoundException'> (0x000000076b373810) thrown at [C:\wsjdk\Corretto8Src\installers\windows\zip\corretto-build\buildRoot\hotspot\src\share\vm\prims\jni.cpp, line 709]
+
+Events (10 events):
+Event: 5199.083 loading class java/awt/image/WritableRenderedImage done
+Event: 5199.083 loading class java/awt/image/BufferedImage done
+Event: 5199.084 loading class java/awt/image/BufferedImage$1
+Event: 5199.084 loading class java/awt/image/BufferedImage$1 done
+Event: 5199.084 loading class sun/awt/image/BufImgSurfaceData
+Event: 5199.085 loading class sun/awt/image/BufImgSurfaceData done
+Event: 5199.086 loading class sun/awt/image/BufImgSurfaceData$ICMColorData
+Event: 5199.086 loading class sun/awt/image/BufImgSurfaceData$ICMColorData done
+Event: 5199.086 loading class sun/java2d/loops/RenderLoops
+Event: 5199.087 loading class sun/java2d/loops/RenderLoops done
+
+
+Dynamic libraries:
+0x00007ff7e0a70000 - 0x00007ff7e0aaa000 	C:\Program Files\Amazon Corretto\jdk1.8.0_382\bin\javaw.exe
+0x00007ff9d1b90000 - 0x00007ff9d1da7000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ff9d0c10000 - 0x00007ff9d0cd4000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ff9cf350000 - 0x00007ff9cf6f5000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ff9d1620000 - 0x00007ff9d16d1000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ff9d0e40000 - 0x00007ff9d0ee7000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ff9d1750000 - 0x00007ff9d17f6000 	C:\WINDOWS\System32\sechost.dll
+0x00007ff9d0f90000 - 0x00007ff9d10a7000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ff9d19a0000 - 0x00007ff9d1b4e000 	C:\WINDOWS\System32\USER32.dll
+0x00007ff9cef70000 - 0x00007ff9cef96000 	C:\WINDOWS\System32\win32u.dll
+0x00007ff9d0f30000 - 0x00007ff9d0f59000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ff9cf190000 - 0x00007ff9cf2a9000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ff9cf2b0000 - 0x00007ff9cf34a000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ff9cf700000 - 0x00007ff9cf811000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ff9c05c0000 - 0x00007ff9c0853000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.22621.2506_none_270c5ae97388e100\COMCTL32.dll
+0x00007ff9d0ef0000 - 0x00007ff9d0f21000 	C:\WINDOWS\System32\IMM32.DLL
+0x00007ff9696c0000 - 0x00007ff9697af000 	C:\Program Files\Amazon Corretto\jdk1.8.0_382\jre\bin\msvcr120.dll
+0x00007ff9b1b40000 - 0x00007ff9b1be6000 	C:\Program Files\Amazon Corretto\jdk1.8.0_382\jre\bin\msvcp120.dll
+0x000000006a7d0000 - 0x000000006b045000 	C:\Program Files\Amazon Corretto\jdk1.8.0_382\jre\bin\server\jvm.dll
+0x00007ff9d0f60000 - 0x00007ff9d0f68000 	C:\WINDOWS\System32\PSAPI.DLL
+0x00007ff9c12f0000 - 0x00007ff9c12f9000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ff9cc2e0000 - 0x00007ff9cc2ea000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ff9c4d90000 - 0x00007ff9c4dc4000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ff9d10b0000 - 0x00007ff9d1121000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ff9c9ff0000 - 0x00007ff9c9fff000 	C:\Program Files\Amazon Corretto\jdk1.8.0_382\jre\bin\verify.dll
+0x00007ff9c6f50000 - 0x00007ff9c6f79000 	C:\Program Files\Amazon Corretto\jdk1.8.0_382\jre\bin\java.dll
+0x00007ff9c9fd0000 - 0x00007ff9c9fe7000 	C:\Program Files\Amazon Corretto\jdk1.8.0_382\jre\bin\zip.dll
+0x00007ff9d03b0000 - 0x00007ff9d0c09000 	C:\WINDOWS\System32\SHELL32.dll
+0x00007ff9ccdd0000 - 0x00007ff9cd6c4000 	C:\WINDOWS\SYSTEM32\windows.storage.dll
+0x00007ff9d11b0000 - 0x00007ff9d1539000 	C:\WINDOWS\System32\combase.dll
+0x00007ff9ccc90000 - 0x00007ff9ccdce000 	C:\WINDOWS\SYSTEM32\wintypes.dll
+0x00007ff9d01d0000 - 0x00007ff9d02c3000 	C:\WINDOWS\System32\SHCORE.dll
+0x00007ff9cfb10000 - 0x00007ff9cfb6e000 	C:\WINDOWS\System32\shlwapi.dll
+0x00007ff9cee30000 - 0x00007ff9cee56000 	C:\WINDOWS\SYSTEM32\profapi.dll
+0x00007ff961a60000 - 0x00007ff961bf5000 	C:\Program Files\Amazon Corretto\jdk1.8.0_382\jre\bin\awt.dll
+0x00007ff9d1540000 - 0x00007ff9d1617000 	C:\WINDOWS\System32\OLEAUT32.dll
+0x00007ff9cbfa0000 - 0x00007ff9cc037000 	C:\WINDOWS\SYSTEM32\apphelp.dll
+0x00007ff9cc650000 - 0x00007ff9cc67b000 	C:\WINDOWS\system32\DWMAPI.DLL
+0x00007ff9cc410000 - 0x00007ff9cc4bb000 	C:\WINDOWS\system32\uxtheme.dll
+0x00007ff9657d0000 - 0x00007ff9658d0000 	C:\WINDOWS\system32\opengl32.dll
+0x00007ff9c0890000 - 0x00007ff9c08bd000 	C:\WINDOWS\SYSTEM32\GLU32.dll
+0x00007ff9cc4f0000 - 0x00007ff9cc526000 	C:\WINDOWS\SYSTEM32\dxcore.dll
+0x00007ff9d0ce0000 - 0x00007ff9d0e2f000 	C:\WINDOWS\System32\MSCTF.dll
+0x00007ff9d1800000 - 0x00007ff9d19a0000 	C:\WINDOWS\System32\ole32.dll
+0x00007ff9cdf50000 - 0x00007ff9cdf68000 	C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+0x00007ff9cf110000 - 0x00007ff9cf18a000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x00007ff9aa9f0000 - 0x00007ff9aab99000 	C:\WINDOWS\system32\d3d9.dll
+0x00007ff9c60a0000 - 0x00007ff9c615c000 	C:\WINDOWS\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_d3828c822366e497\nvldumdx.dll
+0x00007ff9ceba0000 - 0x00007ff9cebb2000 	C:\WINDOWS\SYSTEM32\msasn1.dll
+0x00007ff9c5ec0000 - 0x00007ff9c5ef2000 	C:\WINDOWS\SYSTEM32\cryptnet.dll
+0x00007ff9cefa0000 - 0x00007ff9cf106000 	C:\WINDOWS\System32\CRYPT32.dll
+0x00007ff9c5d60000 - 0x00007ff9c5eb8000 	C:\WINDOWS\SYSTEM32\drvstore.dll
+0x00007ff9cebc0000 - 0x00007ff9cebec000 	C:\WINDOWS\SYSTEM32\devobj.dll
+0x00007ff9cebf0000 - 0x00007ff9cec3e000 	C:\WINDOWS\SYSTEM32\cfgmgr32.dll
+0x00007ff9ce6b0000 - 0x00007ff9ce6fb000 	C:\WINDOWS\SYSTEM32\wldp.dll
+0x00007ff9ce620000 - 0x00007ff9ce62c000 	C:\WINDOWS\SYSTEM32\cryptbase.dll
+0x00007ff9cef00000 - 0x00007ff9cef6c000 	C:\WINDOWS\System32\wintrust.dll
+0x00007ff9cfb70000 - 0x00007ff9cfb8f000 	C:\WINDOWS\System32\imagehlp.dll
+0x00007ff9ceac0000 - 0x00007ff9ceadb000 	C:\WINDOWS\SYSTEM32\CRYPTSP.dll
+0x00007ff9cdf10000 - 0x00007ff9cdf45000 	C:\WINDOWS\system32\rsaenh.dll
+0x00007ff9ceb00000 - 0x00007ff9ceb28000 	C:\WINDOWS\SYSTEM32\bcrypt.dll
+0x00007ff969f80000 - 0x00007ff96d10d000 	C:\WINDOWS\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_d3828c822366e497\nvd3dumx.dll
+0x00007ff9c9950000 - 0x00007ff9c999a000 	C:\WINDOWS\SYSTEM32\directxdatabasehelper.dll
+0x00007ff961780000 - 0x00007ff961a51000 	C:\WINDOWS\system32\nvspcap64.dll
+0x00007ff9cdfd0000 - 0x00007ff9ce004000 	C:\WINDOWS\SYSTEM32\ntmarta.dll
+0x00007ff9ce490000 - 0x00007ff9ce4b6000 	C:\WINDOWS\SYSTEM32\gpapi.dll
+0x00007ff9616d0000 - 0x00007ff961776000 	C:\Program Files\Amazon Corretto\jdk1.8.0_382\jre\bin\freetype.dll
+0x00007ff997060000 - 0x00007ff9970ab000 	C:\Program Files\Amazon Corretto\jdk1.8.0_382\jre\bin\fontmanager.dll
+0x00007ff9c5f50000 - 0x00007ff9c609a000 	C:\WINDOWS\SYSTEM32\textinputframework.dll
+0x00007ff9cf8f0000 - 0x00007ff9cf9a0000 	C:\WINDOWS\System32\clbcatq.dll
+0x00007ff9ac680000 - 0x00007ff9ac6cb000 	C:\WINDOWS\system32\ApplicationTargetedFeatureDatabase.dll
+0x00007ff9c61b0000 - 0x00007ff9c6435000 	C:\Windows\System32\twinapi.appcore.dll
+0x00007ff9c0870000 - 0x00007ff9c088a000 	C:\Program Files\Amazon Corretto\jdk1.8.0_382\jre\bin\net.dll
+0x00007ff9ce420000 - 0x00007ff9ce489000 	C:\WINDOWS\system32\mswsock.dll
+0x00007ff9bfb50000 - 0x00007ff9bfb62000 	C:\Program Files\Amazon Corretto\jdk1.8.0_382\jre\bin\nio.dll
+0x00007ff9cbbc0000 - 0x00007ff9cbcf3000 	C:\WINDOWS\SYSTEM32\CoreMessaging.dll
+0x00007ff9c8c80000 - 0x00007ff9c8fec000 	C:\WINDOWS\SYSTEM32\CoreUIComponents.dll
+
+VM Arguments:
+jvm_args: -Dfile.encoding=UTF-8 
+java_command: DanielsFile
+java_class_path (initial): C:\Users\makei\git\TeamProject\bin
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Amazon Corretto\jdk1.8.0_382
+PATH=C:/Program Files/Java/jdk-20/bin/server;C:/Program Files/Java/jdk-20/bin;C:\Program Files\Oculus\Support\oculus-runtime;C:\Program Files\Amazon Corretto\jdk1.8.0_382\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\dotnet\;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Users\makei\AppData\Local\Programs\Python\Launcher\;C:\Users\makei\AppData\Local\Microsoft\WindowsApps;C:\Users\makei\.dotnet\tools;C:\Users\makei\AppData\Roaming\npm;C:\Program Files\Java\jdk-20\bin;;C:\Users\makei\AppData\Local\Programs\Microsoft VS Code\bin;C:\WINDOWS\System32;
+USERNAME=makei
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=AMD64 Family 23 Model 8 Stepping 2, AuthenticAMD
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 11 , 64 bit Build 22621 (10.0.22621.2506)
+
+CPU:total 12 (initial active 12) (12 cores per cpu, 1 threads per core) family 23 model 8 stepping 2, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, mmxext, 3dnowpref, lzcnt, sse4a, tsc, tscinvbit, tscinv, bmi1
+
+Memory: 4k page, physical 16706960k(4089492k free), swap 67038608k(0k free)
+
+vm_info: OpenJDK 64-Bit Server VM (25.382-b05) for windows-amd64 JRE (1.8.0_382-b05), built on Jul 14 2023 19:32:03 by "Administrator" with MS VC++ 12.0 (VS2013)
+
+time: Sun Nov 19 13:50:05 2023
+timezone: Pacific Standard Time
+elapsed time: 5199.113254 seconds (0d 1h 26m 39s)
+

@@ -8,45 +8,38 @@ public class Page extends JLabel {
 	// add a serialVersionUID to supress warnings
 	private static final long serialVersionUID = 1L;
 	
-	/* Helper Classes */
+	/* Interfaces */
 	
-	public static class EventRunnable implements Runnable{
-		@Override
-		public void run() {}
-		public void run(MouseEvent e) {}
+	// a runnable the takes a mouse event as a parameter
+	public interface EventRunnable {
+		public abstract void run(MouseEvent e);
 	}
 	
 	/* Variables */
 	
-	static int pages = 1;
-	int pageIndex;
+	// the layout object for the page
+	Layout layout = new Layout(); 
 	
-	Layout layout;
-	
-	public LinkedList<EventRunnable> hoverEvents = new LinkedList<>();
+	// the runnables to call when the mouse moves
+	public LinkedList<EventRunnable> movementEvents = new LinkedList<>();
 	
 	/* Methods */
 	
-	public void mouseMovement(MouseEvent e) {
-		for (EventRunnable runner: hoverEvents) {
-			runner.run(e);
+	// call mouse event runnables
+	public void mouseMovementEvent(MouseEvent e) {
+		// loop through all runnables
+		for (EventRunnable runnable: movementEvents) {
+			// call the runnable
+			runnable.run(e);
 		}
 	}
 	
-	public String toString() {
-		return ""+pageIndex;
-	}
-	
+	// update the pages layout if it exists
 	public void update(Window window) {
+		// if the layout is non existant do not proceed
 		if (layout == null) return;
+		// update the layout
 		layout.update(window);
-	}
-	
-	/* Constructors */
-	
-	public Page(Window window){
-		pageIndex = Page.pages++;
-		this.setVisible(true);
 	}
 	
 }

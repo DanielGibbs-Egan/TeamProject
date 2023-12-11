@@ -1,30 +1,25 @@
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Rectangle2D;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 /*
- * Daniel Gibbs-Egan
+ *	Daniel Gibbs-Egan
  *
- * Window() creates a window for visualizing 
- * the game.
+ *	Window() creates a window for visualizing 
+ *	the game.
  *
- * Helper Classes
+ *	helper classes :
+ *		
+ *	variables :
  *
- * Variables
- *
- * Constructors
+ *	constructors :
  *
  */
 
@@ -35,67 +30,95 @@ public class Window extends JFrame {
 
 	/* Helper Classes */
 	
+	/**
+	 * 	<style>
+	 * tab{
+	 *		margin-left: 30px;
+	 * }
+	 * </style>
+	 * 	ButtonInfo: stores information about the pc's mouse<br>
+	 *	<br>
+	 *	variables:<br> 	
+	 *	<tab> isDown: the state of the left mouse button <br> 	
+	 *	<tab> clicked: if the left mouse button has recently been clicked <br>	
+	 *	<tab> canClick: if the left mouse button is able to click
+	 *
+	 */
 	public class ButtonInfo {
-		public boolean isLeftMouseDown;
-		public boolean leftMouseClicked;
-		public boolean canLeftMouseClick;
 		
-		public ButtonInfo() {
-			isLeftMouseDown = false;
-			leftMouseClicked = false;
-			canLeftMouseClick = false;
-		}
+		public boolean isDown = false;
+		public boolean clicked = false;
+		public boolean canClick = false;
+		
 	}
 	
+	/**
+	 * WindowUpdates: a component listener for the application
+	 */
 	public class WindowUpdates implements ComponentListener {
 
 		public void componentHidden(ComponentEvent e) {}
 		public void componentMoved(ComponentEvent e) {}
 		public void componentResized(ComponentEvent e) {
+			// do not proceed if the current page is null
+			if (currentPage == null) return; 
+			// update the current page
 			currentPage.update(window);
 		}
 		public void componentShown(ComponentEvent e) {}
 		
 	}
 	
+	/**
+	 * MouseUpdates: a mouse listener for the application
+	 */
 	private class MouseUpdates implements MouseListener {
-
-		Timer clickTimer = new Timer();
+		// a timer to add delayed deactivation
+		Timer clickTimer = new Timer(); 
 		
 		@Override
 		public void mouseClicked(MouseEvent e) {}
 		public void mousePressed(MouseEvent e) {
 			// if the button pressed is the left mouse button 
 			if (e.getButton() == 1) {
-					buttonInfo.isLeftMouseDown = true; // update the variable
+				
+					leftMouseInfo.isDown = true; // update the buttons variable
 					
-					buttonInfo.canLeftMouseClick = true;
-					clickTimer.schedule(new TimerTask() {
-						@Override
-						public void run() {
-							buttonInfo.canLeftMouseClick = false;
-						}
-					}, 220);
+					leftMouseInfo.canClick = true; // let the mouse click
+					
+					// set canClick to false after 220 ms
+					clickTimer.schedule(
+						new TimerTask() {
+							public void run() {
+								// set canClick to false
+								leftMouseInfo.canClick = false;
+							}
+						}, 
+						220
+					);
 					
 			}
 		}
 		public void mouseReleased(MouseEvent e) {
 		
 			// if the left mouse button is down and the 
-			// button released was the left mouse button
-			if (buttonInfo.isLeftMouseDown && e.getButton() == 1) {
-				if (buttonInfo.canLeftMouseClick) {
-					buttonInfo.leftMouseClicked = true;
+			// released button was the left mouse button
+			if (leftMouseInfo.isDown && e.getButton() == 1) {
+				// check if the button is able to click
+				if (leftMouseInfo.canClick) {
+					// set clicked to true
+					leftMouseInfo.clicked = true;
+					// set clicked to false after 10 ms
 					clickTimer.schedule(new TimerTask() {
-						@Override
 						public void run() {
-							buttonInfo.leftMouseClicked = false;
+							// set clicked to false
+							leftMouseInfo.clicked = false;
 						}
 					}, 10);
 					
 				} 
-				buttonInfo.isLeftMouseDown = false; // The left mouse button has been released
-				//updateBarColor(e);
+				// the left mouse button was released
+				leftMouseInfo.isDown = false; 
 			}
 		}
 		public void mouseEntered(MouseEvent e) {}
@@ -103,31 +126,36 @@ public class Window extends JFrame {
 		
 	}
 	
+	/**
+	 * MouseMovementUpdates: a mouse movement listener for the application
+	 */
 	private class MouseMovementUpdates implements MouseMotionListener {
 
-		@Override
 		public void mouseDragged(MouseEvent e) {}
 		public void mouseMoved(MouseEvent e) {
-			currentPage.mouseMovement(e);
+			// if the current page exists
+			if (currentPage == null) return;
+			// call the current page's mouseMovementEvent()
+			currentPage.mouseMovementEvent(e);
 		}
 		
 	}
 	
 	/* Variables */
 	
-	ButtonInfo buttonInfo = new ButtonInfo(); // stores info about the mouse
+	ButtonInfo leftMouseInfo = new ButtonInfo(); // stores info about the mouse
 	
-	Window window; // this object
+	Window window = this; // this object
 	
 	Page currentPage; // the currently open page
-	
-	Page mainMenu; // the game page
-
-	Page gamePage; // the game page
-	DialogueBox dialogueBox; // the text box
 
 	/* Methods */
 	
+	/**
+	 * delay(int timeMS) : delays the current thread for the given milliseconds
+	 * 
+	 * @param timeMS : the amount of time to delay in milliseconds
+	 */
 	public void delay(int timeMS) {
 		try {
 			Thread.sleep(timeMS);
@@ -135,108 +163,74 @@ public class Window extends JFrame {
 			//delay was impossible
 		}
 	}
-	
-	public boolean getLeftMouseDown() {
-		return buttonInfo.isLeftMouseDown;
+
+	/**
+	 * createPage() : creates a new (Page)
+	 * 
+	 * @return a new (Page) with default settings
+	 */
+	public Page createPage() {
+		Page newPage = new Page(); // create a new page
+			newPage.setOpaque(true); // make the page opaque
+			// default the pages background color to black
+			newPage.setBackground(Color.BLACK); 
+			newPage.update(window); // update the page
+			newPage.paint(getGraphics()); // render the page
+		return newPage; // return the new page
 	}
 	
+	/**
+	 * setCurrentPage(Page page) : changes the current page to the given page
+	 * 
+	 * @param page : the page to replace the current page with
+	 */
 	public void setCurrentPage(Page page) {
 		
-		Page oldPage = currentPage;
-		if (oldPage != null) {
-			oldPage.getParent().remove(oldPage);;
-			oldPage.update(window);
+		Page oldPage = currentPage; // obtain the old page
+		if (oldPage != null) { // if the old page exists
+			window.remove(oldPage); // remove it from the window
 		}
-		this.currentPage = page;
-		window.add(currentPage);
-		currentPage.update(window);
-		window.repaint();
-		System.out.println("currentPage: "+currentPage);
-		
+		currentPage = page; // set the current page to the new page
+		if (currentPage == null) return; // end the method if the new page is null
+		window.add(currentPage); // add the new page to the window
+		currentPage.update(window); // update the page
+		// make sure the page covers the window
+		currentPage.setSize(window.getContentPane().getSize()); 
+		window.repaint(); // update the visuals
 		
 	}
 	
 	/* Contructors */
 	
+	/**
+	 * Window() : creates a new default game window
+	 */
 	public Window() {
 		
-		window = this;
+		// end the program when the window is closed
+		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
-		this.setVisible(true);
-		this.setSize(500,500);
-		this.setLocationRelativeTo(null);
-		
-		mainMenu = new Page(this);
-		mainMenu.setOpaque(true);
-		mainMenu.setBackground(Color.BLACK);
-		mainMenu.update(window);
-		currentPage = mainMenu;
-		window.add(mainMenu);
-		
-		gamePage = new Page(this);
-		gamePage.setOpaque(true);
-		gamePage.setBackground(Color.GRAY);
-		gamePage.update(window);
-		
-		JButton b = new JButton();
-		mainMenu.add(b);
-		b.setBounds(0, 0, 100, 100);
-		b.setText("Start");
-		b.addMouseListener(new MouseListener() {
-			
-			boolean isDown = false;
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				if (isDown) {
-					setCurrentPage(gamePage);
-				}
-				isDown = false;
-			}
-			public void mousePressed(MouseEvent e) {
-				isDown = true;
-			}
-			public void mouseExited(MouseEvent e) {
-				isDown = false;
-			}
-			public void mouseEntered(MouseEvent e) {}
-			public void mouseClicked(MouseEvent e) {}
-		});
-		
-		JLabel hoverBar = new JLabel();
-		hoverBar.setBackground(Color.WHITE);
-		hoverBar.setOpaque(true);
-		hoverBar.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.BLACK));
-		
-		dialogueBox = new DialogueBox(this, gamePage, hoverBar);
-		
-		gamePage.setBackground(Color.GRAY);
-		
-		Layout layout = new Layout(true);
-		layout.add(dialogueBox, new Rectangle2D.Double(0,0,1,.5), new Rectangle(0,0,0,0));
-		layout.add(hoverBar, new Rectangle2D.Double(0,0,1,0), new Rectangle(0,0,0,25));
-		
-		gamePage.layout = layout;
+		// make the window visible
+		window.setVisible(true);
+		// create a default size for the window
+		window.setSize(500,500);
+		// center the window on the screen
+		window.setLocationRelativeTo(null);
 
-		gamePage.add(dialogueBox);
-		gamePage.add(hoverBar);
-
-		Thread t = new Thread(
+		// create a new thread for the mouse and window listeners
+		Thread listenersThread = new Thread(
 			new Runnable() {
-				
-				@Override
 				public void run() {
-					// TODO Auto-generated method stub
-					window.addComponentListener(new WindowUpdates());
+					// listen for window updates
+					window.addComponentListener(new WindowUpdates()); 
+					// listen for mouse inputs
 					window.addMouseListener(new MouseUpdates());
+					// listen for mouse movement
 					window.addMouseMotionListener(new MouseMovementUpdates());
 				}
 			}
 		);
-		t.start();
-		setCurrentPage(mainMenu);
+		listenersThread.start(); // start the listener thread
 		
 	}
 	

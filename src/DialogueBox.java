@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class DialogueBox extends JLabel {
 
@@ -46,9 +47,39 @@ public class DialogueBox extends JLabel {
 			this.setBackground(Color.BLACK);
 			
 			// add a 
-			this.setBorder(BorderFactory.createMatteBorder(2,4,2,4,Color.WHITE));
+			this.setBorder(BorderFactory.createMatteBorder(2, 4, 2, 4, Color.WHITE));
+			
+			this.setFont(new Font("Monospaced", 1, 18));
 		}
+	}
+	
+	public class TextBox extends JTextField {
 		
+		private static final long serialVersionUID = 1L;
+
+		public TextBox() {
+			
+			super();
+			
+			this.setOpaque(true); // Make the button background visible
+
+			this.setForeground(Color.WHITE); 
+			this.setBackground(Color.BLACK);
+			
+			this.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.WHITE));
+			
+			this.setHorizontalAlignment(CENTER);
+		}
+	}
+	
+	public void updateColor(Component component, boolean down, boolean hovering) {
+		if (down) {
+			component.setBackground(Color.getHSBColor(0, 0, 0.14f));
+		} else if (hovering) {
+			component.setBackground(Color.getHSBColor(0, 0, 0.07f));
+		} else { 
+			component.setBackground(Color.getHSBColor(0, 0, 0));
+		}
 	}
 	
 	private class ButtonListener implements MouseListener {
@@ -58,20 +89,7 @@ public class DialogueBox extends JLabel {
 		
 		int index;
 		
-		public ButtonListener(int index) {
-			this.index = index;
-		}
-		
-		public void updateColor(Component component) {
-			if (down) {
-				component.setBackground(Color.getHSBColor(0, 0, 0.14f));
-			} else if (hovering) {
-				component.setBackground(Color.getHSBColor(0, 0, 0.07f));
-			} else { 
-				component.setBackground(Color.getHSBColor(0, 0, 0));
-			}
-			
-		}
+		public ButtonListener(int index) { this.index = index; }
 		
 		@Override
 		public void mouseReleased(MouseEvent e) {
@@ -79,25 +97,61 @@ public class DialogueBox extends JLabel {
 				indexReturn = index;
 			}
 			down = false;
-			updateColor(e.getComponent());
+			updateColor(e.getComponent(),down,hovering);
 			
 		}
 		public void mousePressed(MouseEvent e) {
 			down = true;
-			updateColor(e.getComponent());
+			updateColor(e.getComponent(),down,hovering);
 		}
 		public void mouseExited(MouseEvent e) {
 			down = false;
 			hovering = false;
-			updateColor(e.getComponent());
+			updateColor(e.getComponent(),down,hovering);
 		}
 		public void mouseEntered(MouseEvent e) {
 			hovering = true;
-			updateColor(e.getComponent());
+			updateColor(e.getComponent(),down,hovering);
 		}
 		public void mouseClicked(MouseEvent e) {}
 	}
 
+	private class SubmitButtonListener implements MouseListener {
+		
+		boolean hovering = true;
+		boolean down = false;
+		
+		TextBox textBox;
+		
+		public SubmitButtonListener(TextBox textBox) {
+			this.textBox = textBox;
+		}
+		
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if (down) { 
+				input = textBox.getText();
+			}
+			down = false;
+			updateColor(e.getComponent(),down,hovering);
+			
+		}
+		public void mousePressed(MouseEvent e) {
+			down = true;
+			updateColor(e.getComponent(),down,hovering);
+		}
+		public void mouseExited(MouseEvent e) {
+			down = false;
+			hovering = false;
+			updateColor(e.getComponent(),down,hovering);
+		}
+		public void mouseEntered(MouseEvent e) {
+			hovering = true;
+			updateColor(e.getComponent(),down,hovering);
+		}
+		public void mouseClicked(MouseEvent e) {}
+	}
+	
 	/* Variables */
 	
 	double xScalar = 1, yScalar = 1/3d;
@@ -128,13 +182,15 @@ public class DialogueBox extends JLabel {
 	};
 	
 	public void addDialogue(String text, int timeBetweenLettersMS) {
+
+		while (this.getParent().getParent() == null) delay(10);
 		Point mousePosition = window.getMousePosition();
 		for (int i = 0; i <= text.length(); i++) {
 			setText("<html>" + text.substring(0, i) + "</html>");
-			delay(timeBetweenLettersMS/((window.getLeftMouseDown())? 10:1));
+			delay(timeBetweenLettersMS/((window.leftMouseInfo.isDown)? 10:1));
 		}
 		if (!askingQuestion)
-		while (window == null || !(window.buttonInfo.leftMouseClicked && isLocationInBounds(mousePosition))) {
+		while (window == null || !(window.leftMouseInfo.clicked && isLocationInBounds(mousePosition))) {
 			mousePosition = window.getMousePosition();
 			delay(10);
 		}
@@ -143,6 +199,56 @@ public class DialogueBox extends JLabel {
 	
 	public void addDialogue(String text) {
 		addDialogue(text, 100);
+	}
+	
+	String input = null;
+	public String askQuestion(String question, Layout layout) {
+
+		askingQuestion = true;
+		addDialogue(question);
+
+		TextBox questionBox = new TextBox();
+		questionBox.setFont(new Font("Monospaced", 1, 24));
+		JButton questionButton = new JButton("Submit");
+		questionButton.setFont(new Font("Monospaced", 1, 18));
+		questionButton.setOpaque(true); // Make the button background visible
+
+		questionButton.setForeground(Color.WHITE); 
+		questionButton.setBackground(Color.BLACK);
+		
+		questionButton.setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.WHITE));
+
+		questionButton.addMouseListener(new SubmitButtonListener(questionBox));
+		
+		layout.add(questionBox, new Rectangle2D.Double(0,0,1,.1), new Rectangle(0,0,0,0));
+		layout.add(questionBox, 24);
+		layout.add(questionButton, new Rectangle2D.Double(0,0,1,.05), new Rectangle(0,0,0,0));
+		layout.add(questionButton, 18);
+		
+		this.getParent().add(questionBox);
+		this.getParent().add(questionButton);
+		
+		layout.update(window);
+		
+		while (input == null) {
+			delay(10);
+		}
+		
+		String returnInput = input;
+		input = null;
+
+		questionBox.getParent().remove(questionBox);
+		layout.remove(questionBox);
+		
+		questionButton.getParent().remove(questionButton);
+		layout.remove(questionButton);
+		
+		layout.update(window);
+		
+		askingQuestion = false;
+		
+		return returnInput;
+		
 	}
 
 	int indexReturn = -1;
@@ -162,6 +268,7 @@ public class DialogueBox extends JLabel {
 			questionsList.add(questionButton);
 			
 			layout.add(questionButton, new Rectangle2D.Double(0,0,1,.05), new Rectangle(0,0,0,0));
+			layout.add(questionButton, 18);
 			
 			this.getParent().add(questionButton);
 			
@@ -180,6 +287,7 @@ public class DialogueBox extends JLabel {
 		}
 		
 		layout.update(window);
+		
 		
 		askingQuestion = false;
 
@@ -229,12 +337,13 @@ public class DialogueBox extends JLabel {
 		
 		this.setVerticalAlignment(1);
 		this.setBorder(BorderFactory.createMatteBorder( 10, 15, 15, 15, Color.BLACK));
-		
+
 	}
 	
 	public DialogueBox(Window window) {
 		this();
 		this.window = window;
+
 	}
 	
 	public DialogueBox(Window window, Page page, JLabel hoverBar) {
@@ -242,8 +351,8 @@ public class DialogueBox extends JLabel {
 		this(window);
 		this.hoverBar = hoverBar;
 		
-		page.hoverEvents.add((Page.EventRunnable) hoverEdits);
-		page.add(this);
+		page.movementEvents.add((Page.EventRunnable) hoverEdits);
+		page.add(this);		
 		
 	}
 	
