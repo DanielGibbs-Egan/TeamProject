@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -141,6 +142,66 @@ public class Window extends JFrame {
 		
 	}
 	
+	/**
+	 * 	class <b>ButtonListener</b> : a class that listens to <br>
+	 * 	the interactions of the pc's mouse with a JComponent <br>
+	 *	<br>
+	 *	when the mouse clicks calls the runnable <br>
+	 */
+	public static class ButtonListener implements MouseListener {
+		// whether the mouse is pressed
+		boolean down = false; 
+		// the runnable to call when the mouse is clicked
+		Runnable runnable; 
+		
+		/* Constructors */
+		
+		/**
+		 * ButtonListener(Runnable runnable) : Creates a new ButtonListener<br><br>
+		 * 
+		 * @param runnable : the runnable to call when the mouse is clicked
+		 */
+		public ButtonListener(Runnable runnable) {
+			this.runnable = runnable; 
+		}
+		
+		/* Methods */
+		public void mouseReleased(MouseEvent e) {
+			// if the button pressed was not the 
+			// left mouse button end the call
+			if (e.getButton() != MouseEvent.BUTTON1) return;
+			// if the mouse was pressed
+			if (down) { 
+				// run the function
+				runnable.run();
+			}
+			// the mouse button is no longer down
+			down = false;
+			// update the buttons color
+			updateColor(e.getComponent(), 1);
+		}
+		public void mousePressed(MouseEvent e) {
+			// if the button pressed was not the 
+			// left mouse button end the call
+			if (e.getButton() != MouseEvent.BUTTON1) return;
+			// the mouse button has been pressed
+			down = true;
+			// update the buttons color
+			updateColor(e.getComponent(), 3);
+		}
+		public void mouseExited(MouseEvent e) {
+			// the mouse left the button
+			down = false;
+			// update the buttons color
+			updateColor(e.getComponent(), 1);
+		}
+		public void mouseEntered(MouseEvent e) {
+			// update the buttons color
+			updateColor(e.getComponent(), 2);
+		}
+		public void mouseClicked(MouseEvent e) {}
+	}
+	
 	/* Variables */
 	
 	ButtonInfo leftMouseInfo = new ButtonInfo(); // stores info about the mouse
@@ -150,6 +211,26 @@ public class Window extends JFrame {
 	Page currentPage; // the currently open page
 
 	/* Methods */
+	
+	/**
+	 * 	updateColor(Component component, int selection) : colors a components
+	 *	 background based on a selection
+	 * 
+	 * 	@param component : the component to color
+	 * 	@param selection : what color to set the component to
+	 */
+	public static void updateColor(Component component, int selection) {
+		if (selection == 1) {
+			// set the background color to black
+			component.setBackground(Color.BLACK);
+		} else if (selection == 2) {
+			// set the background color to an extremely dark gray
+			component.setBackground(Color.getHSBColor(0, 0, 0.07f));
+		} else { 
+			// set the background color to an very dark gray
+			component.setBackground(Color.getHSBColor(0, 0, 0.14f));
+		}
+	}
 	
 	/**
 	 * delay(int timeMS) : delays the current thread for the given milliseconds

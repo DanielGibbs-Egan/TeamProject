@@ -1,13 +1,10 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
@@ -20,16 +17,6 @@ public class DanielsFile {
 		
 		return random;
 		
-	}
-
-	private static void updateColor(JComponent component, int n) {
-		if (n == 0) {
-			component.setBackground(Color.BLACK);
-		} else if (n == 1) {
-			component.setBackground(Color.getHSBColor(0, 0, 0.07f));
-		} else {
-			component.setBackground(Color.getHSBColor(0, 0, 0.14f));
-		}
 	}
 	
 	public static void main(String[] args) {
@@ -70,22 +57,15 @@ public class DanielsFile {
 		startButton.setBorder(BorderFactory.createMatteBorder(4,4,4,4,Color.WHITE));
 		
 		startButton.removeMouseListener(startButton.getMouseListeners()[0]);
-		startButton.addMouseListener(new MouseListener() {
-			
-			boolean isDown = false;
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				if (isDown) { window.setCurrentPage(gamePage); } 
-				updateColor(startButton, 0); 
-				isDown = false;
-			}
-			public void mousePressed(MouseEvent e) { isDown = true; updateColor(startButton, 2); }
-			public void mouseExited(MouseEvent e) { isDown = false; updateColor(startButton, 0); }
-			public void mouseEntered(MouseEvent e) { updateColor(startButton, 1); }
-			public void mouseClicked(MouseEvent e) {}
-			
-		});
+		startButton.addMouseListener( 
+			new Window.ButtonListener(
+				new Runnable() {
+					public void run() {
+						 window.setCurrentPage(gamePage);
+					}
+				}
+			)
+		);
 
 		mainMenu.add(startButton);
 		mainMenu.layout.add(startButton, new Rectangle2D.Double(0.5,0.5,0,0), new Rectangle(-100,15,200,50));

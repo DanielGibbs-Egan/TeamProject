@@ -1,17 +1,16 @@
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -20,340 +19,367 @@ public class DialogueBox extends JLabel {
 	// add a serialVersionUID to supress warnings
 	private static final long serialVersionUID = 1L;
 	
-	/* Helper Classes */
-	
-	// Question Button 
-	public class Question extends JButton {
-		
-		// add a serialVersionUID to supress warnings
-		private static final long serialVersionUID = 1L;
-
-		public void destroy() {
-			this.removeMouseListener(this.getMouseListeners()[0]);
-			this.getParent().remove(this);
-		}
-		
-		public Question(String s, int index) {
-			
-			super(s);
-
-			this.removeMouseListener(this.getMouseListeners()[0]);
-
-			this.addMouseListener(new ButtonListener(index));
-			
-			this.setOpaque(true); // Make the button background visible
-
-			this.setForeground(Color.WHITE); 
-			this.setBackground(Color.BLACK);
-			
-			// add a 
-			this.setBorder(BorderFactory.createMatteBorder(2, 4, 2, 4, Color.WHITE));
-			
-			this.setFont(new Font("Monospaced", 1, 18));
-		}
-	}
-	
-	public class TextBox extends JTextField {
-		
-		private static final long serialVersionUID = 1L;
-
-		public TextBox() {
-			
-			super();
-			
-			this.setOpaque(true); // Make the button background visible
-
-			this.setForeground(Color.WHITE); 
-			this.setBackground(Color.BLACK);
-			
-			this.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.WHITE));
-			
-			this.setHorizontalAlignment(CENTER);
-		}
-	}
-	
-	public void updateColor(Component component, boolean down, boolean hovering) {
-		if (down) {
-			component.setBackground(Color.getHSBColor(0, 0, 0.14f));
-		} else if (hovering) {
-			component.setBackground(Color.getHSBColor(0, 0, 0.07f));
-		} else { 
-			component.setBackground(Color.getHSBColor(0, 0, 0));
-		}
-	}
-	
-	private class ButtonListener implements MouseListener {
-		
-		boolean hovering = true;
-		boolean down = false;
-		
-		int index;
-		
-		public ButtonListener(int index) { this.index = index; }
-		
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			if (down) { 
-				indexReturn = index;
-			}
-			down = false;
-			updateColor(e.getComponent(),down,hovering);
-			
-		}
-		public void mousePressed(MouseEvent e) {
-			down = true;
-			updateColor(e.getComponent(),down,hovering);
-		}
-		public void mouseExited(MouseEvent e) {
-			down = false;
-			hovering = false;
-			updateColor(e.getComponent(),down,hovering);
-		}
-		public void mouseEntered(MouseEvent e) {
-			hovering = true;
-			updateColor(e.getComponent(),down,hovering);
-		}
-		public void mouseClicked(MouseEvent e) {}
-	}
-
-	private class SubmitButtonListener implements MouseListener {
-		
-		boolean hovering = true;
-		boolean down = false;
-		
-		TextBox textBox;
-		
-		public SubmitButtonListener(TextBox textBox) {
-			this.textBox = textBox;
-		}
-		
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			if (down) { 
-				input = textBox.getText();
-			}
-			down = false;
-			updateColor(e.getComponent(),down,hovering);
-			
-		}
-		public void mousePressed(MouseEvent e) {
-			down = true;
-			updateColor(e.getComponent(),down,hovering);
-		}
-		public void mouseExited(MouseEvent e) {
-			down = false;
-			hovering = false;
-			updateColor(e.getComponent(),down,hovering);
-		}
-		public void mouseEntered(MouseEvent e) {
-			hovering = true;
-			updateColor(e.getComponent(),down,hovering);
-		}
-		public void mouseClicked(MouseEvent e) {}
-	}
-	
 	/* Variables */
 	
-	double xScalar = 1, yScalar = 1/3d;
-
-	private DialogueBox main;
+	// the dialogue box
+	private DialogueBox main = this; 
+	// the bar at the bottom of the dialogue box
 	private JLabel hoverBar;
-	private Window window;
+	// the application window
+	private Window window; 
+
+	int indexOfChoice = -1;
 	
-	boolean askingQuestion = false;
+	// is the application waiting for an answer
+	boolean askingQuestion = false; 
+
+	// the players input to answer a question
+	String playerAnswer = null;
 	
+	// an event listener for mouse interactions
 	Page.EventRunnable hoverEdits = new Page.EventRunnable() {
 		
 		public void run(MouseEvent e) {
-			
+			// default the color to black
 			Color color = Color.BLACK;
-			
+			// store the mouses location
 			Point location = e.getPoint();
-			
+			// if the dialogue box is visible
 			if (main.isVisible()) {
+				// check if the mouse is hovering the box
 				if (isLocationInBounds(location)) {
+					// if the mouse is hovering set the color to white
 					color = Color.WHITE;
 				}
 			}
+			// change the hover bars color
 			hoverBar.setBackground(color);
-			
 		}
-
 	};
 	
-	public void addDialogue(String text, int timeBetweenLettersMS) {
+	/* Methods */
 
-		while (this.getParent().getParent() == null) delay(10);
-		Point mousePosition = window.getMousePosition();
-		for (int i = 0; i <= text.length(); i++) {
-			setText("<html>" + text.substring(0, i) + "</html>");
-			delay(timeBetweenLettersMS/((window.leftMouseInfo.isDown)? 10:1));
-		}
-		if (!askingQuestion)
-		while (window == null || !(window.leftMouseInfo.clicked && isLocationInBounds(mousePosition))) {
-			mousePosition = window.getMousePosition();
-			delay(10);
-		}
-		
+	/**
+	 * stylizeComponent(JComponent component, boolean hasBottom) :
+	 * sets the components colors to black and white, adds an outline and 
+	 * sets the font to monospaced
+	 * 
+	 * @param component : the component to stylize
+	 * @param hasBottom : whether to add a bottom to the outline
+	 * @return component : the same component as inputed
+	 */
+	public JComponent stylizeComponent(JComponent component, boolean hasBottom) {
+		// Make the component's background visible
+		component.setOpaque(true); 
+		// set the component's background & foreground colors
+		component.setForeground(Color.WHITE); 
+		component.setBackground(Color.BLACK);
+		// create a border for the component
+		component.setBorder(BorderFactory.createMatteBorder(2, 2, (hasBottom)? 2: 0, 2, Color.WHITE));
+		// set the component's font
+		component.setFont(new Font("Monospaced", 1, 18));
+		// return the component
+		return component;
 	}
 	
+	/**
+	 * addDialogue(String text, int delayMS) : adds dialogue to the screen
+	 * with a typewriter effect
+	 * 
+	 * @param text : the dialogue to add
+	 * @param delayMS : the delay between the adding of each letter to the screen
+	 */
+	public void addDialogue(String text, int delayMS) {
+		// check if the dialogue box is on the application
+		while (this.getParent().getParent() == null) delay(10);
+		// store the mouses position
+		Point mousePosition = window.getMousePosition();
+		// loop through each character of the text
+		for (int i = 1; i <= text.length(); i++) {
+			// update the text to show the new character
+			setText("<html>" + text.substring(0, i) + "</html>");
+			// add a delay between the next character addition, speed up if the mouse is pressed
+			delay(delayMS/((window.leftMouseInfo.isDown)? 10:1));
+		}
+		// if the program is not asking a question
+		if (!askingQuestion)
+		// repeat while the window does not exist or the player has not clicked the dialogue box
+		while (window == null || !(window.leftMouseInfo.clicked && isLocationInBounds(mousePosition))) {
+			// update the mouse position
+			mousePosition = window.getMousePosition();
+			// delay for 10ms
+			delay(10); 
+		}
+	}
+	
+	/**
+	 * addDialogue(String text) : adds dialogue to the screen
+	 * with a typewriter effect spaced by 100ms
+	 * 
+	 * @param text : the dialogue to add
+	 */
 	public void addDialogue(String text) {
+		// call addDialogue(text, delayMS)
 		addDialogue(text, 100);
 	}
-	
-	String input = null;
+
+	/**
+	 * askQuestion(String question, Layout layout) : asks the player a question
+	 * and returns there response as a string
+	 * 
+	 * @param question : the dialogue to add before the question is asked
+	 * @param layout : the pages layout
+	 * @return new String() : the players input
+	 */
 	public String askQuestion(String question, Layout layout) {
 
+		// a question is being asked
 		askingQuestion = true;
+		
+		// add the question to the box
 		addDialogue(question);
 
-		TextBox questionBox = new TextBox();
-		questionBox.setFont(new Font("Monospaced", 1, 24));
-		JButton questionButton = new JButton("Submit");
-		questionButton.setFont(new Font("Monospaced", 1, 18));
-		questionButton.setOpaque(true); // Make the button background visible
-
-		questionButton.setForeground(Color.WHITE); 
-		questionButton.setBackground(Color.BLACK);
+		// create an input field
+		JTextField questionBox = new JTextField();
+		// center the input text
+		questionBox.setHorizontalAlignment(CENTER);
+		// format the text field
+		stylizeComponent(questionBox, false);
 		
-		questionButton.setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.WHITE));
+		// create a submition button
+		JButton submitButton = new JButton("Submit");
+		// format the submition button
+		stylizeComponent(submitButton, true);
 
-		questionButton.addMouseListener(new SubmitButtonListener(questionBox));
+		// when the button is clicked
+		submitButton.addMouseListener(
+			new Window.ButtonListener(
+				new Runnable() {
+					public void run() {
+						// set the player's answer to the text in the text field
+						playerAnswer = questionBox.getText();
+					}
+				}
+			)
+		);
 		
+		// add scaling information
 		layout.add(questionBox, new Rectangle2D.Double(0,0,1,.1), new Rectangle(0,0,0,0));
 		layout.add(questionBox, 24);
-		layout.add(questionButton, new Rectangle2D.Double(0,0,1,.05), new Rectangle(0,0,0,0));
-		layout.add(questionButton, 18);
+		layout.add(submitButton, new Rectangle2D.Double(0,0,1,.05), new Rectangle(0,0,0,0));
+		layout.add(submitButton, 18);
 		
+		// add the text field and button to the page
 		this.getParent().add(questionBox);
-		this.getParent().add(questionButton);
+		this.getParent().add(submitButton);
 		
+		// update the layout
 		layout.update(window);
 		
-		while (input == null) {
-			delay(10);
+		// wait for the players answer
+		while (playerAnswer == null) {
+			delay(10); // delay for 10 ms
 		}
 		
-		String returnInput = input;
-		input = null;
+		// store the players answer
+		String input = playerAnswer;
+		// reset the playerAnswer variable
+		playerAnswer = null;
 
+		// remove the text field and button from the page
 		questionBox.getParent().remove(questionBox);
+		submitButton.getParent().remove(submitButton);
+		
+		// remove the text field and button from the layout
 		layout.remove(questionBox);
-		
-		questionButton.getParent().remove(questionButton);
-		layout.remove(questionButton);
-		
+		layout.remove(submitButton);
+
+		// update the layout
 		layout.update(window);
 		
+		// a question is no longer being asked
 		askingQuestion = false;
 		
-		return returnInput;
-		
-	}
-
-	int indexReturn = -1;
-	public int addQuestionaire(String question, Layout layout, String... choices) {
-		
-		askingQuestion = true;
-		addDialogue(question);
-		
-		Queue<JButton> questionsList = new ConcurrentLinkedQueue<JButton>();
-		
-		for (int index = 0; index < choices.length; index++) {
-			
-			String choice = choices[index];
-			
-			JButton questionButton = new Question(choice, index);
-
-			questionsList.add(questionButton);
-			
-			layout.add(questionButton, new Rectangle2D.Double(0,0,1,.05), new Rectangle(0,0,0,0));
-			layout.add(questionButton, 18);
-			
-			this.getParent().add(questionButton);
-			
-		}
-		
-		layout.update(window);
-		
-		while (indexReturn < 0) {
-			delay(10);
-		}
-		
-		for (int i = 0; i < choices.length; i++) {
-			Question q = (Question) questionsList.remove();
-			layout.remove(q);
-			q.destroy();
-		}
-		
-		layout.update(window);
-		
-		
-		askingQuestion = false;
-
-		int localIndexReturn = indexReturn;
-		indexReturn = -1;
-		
-		return localIndexReturn;
-		
+		// return the players input
+		return input;
 		
 	}
 	
+	/**
+	 * askQuestion(String question, Layout layout) : asks the player a question
+	 * and returns there response as a string
+	 * 
+	 * @param question : the dialogue to add before the question is asked
+	 * @param layout : the pages layout
+	 * @param choices : an arbitrary amount of answers to the question
+	 * @return <b>int</b> : the index of the players choice
+	 */
+	public int addQuestionaire(String question, Layout layout, String... choices) {
+
+		// a question is being asked
+		askingQuestion = true;
+
+		// add the question to the box
+		addDialogue(question);
+
+		// a list of all the choice buttons
+		Queue<JLabel> choiceList = new ConcurrentLinkedQueue<>();
+		
+		// loop through the choices
+		for (int index = 0; index < choices.length; index++) {
+			
+			// store the choice text
+			String choice = choices[index];
+			
+			// create a new button
+			JLabel choiceButton = new JLabel(choice);
+			// center the new buttons text
+			choiceButton.setHorizontalAlignment(CENTER);
+			// format the new button
+			stylizeComponent(choiceButton, (index == choices.length-1));
+			
+			// store the index to a final variable for access from a runnable
+			final int finalIndex = index;
+			// update button for mouse events
+			choiceButton.addMouseListener( 
+				new Window.ButtonListener(
+					new Runnable() {
+						// if the mouse clicks 
+						public void run() {
+							//set the index to the choices index
+							indexOfChoice = finalIndex;
+						}
+					}
+				)
+			);
+			
+			// add the button to the choice list
+			choiceList.add(choiceButton);
+			
+			// add the button and its text to the pages layout
+			layout.add(choiceButton, new Rectangle2D.Double(0,0,1,.05), new Rectangle(0,0,0,0));
+			layout.add(choiceButton, 18);
+			
+			// add the button to the page
+			this.getParent().add(choiceButton);
+		}
+		
+		// update the layout
+		layout.update(window);
+		
+		// delay the thread until the chosen index is a valid integer
+		while (indexOfChoice < 0) {
+			delay(10);
+		}
+		
+		// for each choice button in the choices list
+		for (int i = 0; i < choices.length; i++) {
+			// remove the button from the list
+			JLabel choiceButton = choiceList.remove();
+			// remove the mouse listener from the button
+			choiceButton.removeMouseListener(choiceButton.getMouseListeners()[0]);
+			// remove the button from the page
+			choiceButton.getParent().remove(choiceButton);
+			// remove the button from the layout
+			layout.remove(choiceButton);
+		}
+		
+		// update the layout
+		layout.update(window);
+
+		// a question is no longer being asked
+		askingQuestion = false;
+
+		// store the choices index
+		int localIndexReturn = indexOfChoice;
+		// reset the indexOfChoice variable
+		indexOfChoice = -1;
+		
+		//return the chosen index
+		return localIndexReturn;
+	}
+	/**
+	 * delay(int timeMS) : delays the current thread
+	 * 
+	 * @param timeMS : time to delay the current thread by in milliseconds
+	 */
 	public void delay(int timeMS) {
 		try {
-			Thread.sleep(timeMS);
+			// put the thread to sleep for timeMS milliseconds
+			Thread.sleep(timeMS); 
 		} catch (InterruptedException e) {
 			//delay was impossible
 		}
 	}
 	
+	/**
+	 * given a location relative to the window check if it is inside the dialogue box
+	 * 
+	 * @param location : a location relative to the window
+	 * @return boolean : if the location was inside the dialogue box
+	 */
 	public boolean isLocationInBounds(Point location) {
 
+		// if the location does not exist exit the method
 		if (location == null) return false;
 		
+		// get the location of the dialogue box
 		Point top = main.getLocation();
+		// move up by 30 pixels to account for the topbar
 		top.translate(0, 30);
 		
+		// get the size of the hover bar
 		Dimension sizeOfBar = hoverBar.getSize();
+		// get the bottom of the dialogue box
 		Point bottom = hoverBar.getLocation();
+		// move the bottom over to the bottom right of the hoverbar
 		bottom.translate((int)sizeOfBar.getWidth(),(int)sizeOfBar.getHeight());
 		
+		// if the location is within the top and bottom positions
 		if ((location.getX() > top.getX() && location.getY() > top.getY()) && 
 				(location.getX() < bottom.getX() && location.getY() < bottom.getY())) {
+				// the location is contained in the dialogue box
 				return true;
 		}
+		// the location is not contained in the dialogue box
 		return false;
 	}
 	
+	/* Constructors */
+	
+	/**
+	 * DialogueBox() : creates a new DialogueBox
+	 */
 	public DialogueBox() {
 
-		main = this;
-		
-		this.setBackground(Color.BLACK);
-		this.setOpaque(true);
-		
-		this.setFont(new Font("Monospaced", 1, 24));
-		this.setForeground(Color.WHITE);
-		
+		// format the dialogue box
+		stylizeComponent(this, true);
+		// move the text to the top of the dialogue box
 		this.setVerticalAlignment(1);
+		// inset the text from the edges of the box
 		this.setBorder(BorderFactory.createMatteBorder( 10, 15, 15, 15, Color.BLACK));
-
 	}
 	
 	public DialogueBox(Window window) {
+		
+		// call the main constructor
 		this();
+		// update the window variable
 		this.window = window;
 
 	}
 	
 	public DialogueBox(Window window, Page page, JLabel hoverBar) {
-		
+
+		// call the window constructor
 		this(window);
+		
+		// store the hover bar
 		this.hoverBar = hoverBar;
 		
+		// add the dialogue box to the pages movement events
 		page.movementEvents.add((Page.EventRunnable) hoverEdits);
+		// add the dialogue box to the page
 		page.add(this);		
-		
 	}
-	
 }
