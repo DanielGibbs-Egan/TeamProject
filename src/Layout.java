@@ -5,6 +5,20 @@ import java.util.LinkedList;
 
 import javax.swing.JComponent;
 
+/*
+ *	Daniel Gibbs-Egan
+ *
+ *	Layout() creates a layout for adjusting components locations 
+ *	and sizes relative to the window
+ *
+ *	helper classes :
+ *		
+ *	variables :
+ *
+ *	constructors :
+ *
+ */
+
 public class Layout {
 
 	/* Helper Classes */
@@ -203,6 +217,15 @@ public class Layout {
 			rectangle = addRectangles(rectangle, data.offset);
 			// create a new rectangle a distance of position the component as low as allowed
 			Rectangle position = new Rectangle(0, bounds.height - height - rectangle.height, 0, 0);
+			// find the distance from the top of the component to the top of the window
+			int distanceFromTop = bounds.height - (height + rectangle.height);
+			// check if the component passed the top
+			if (distanceFromTop < 0) {
+				// set the position to the top
+				position.setLocation(0, 0);
+				// shrink the size of the element so it is contained in the window
+				rectangle.setSize(rectangle.width, bounds.height-height);
+			}
 			// increase the current height by the height of the rectangle
 			height = height + rectangle.height;
 			// add the position rectangle to the scale & offset rectangles

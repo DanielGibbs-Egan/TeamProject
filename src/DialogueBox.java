@@ -14,6 +14,20 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+/*
+ *	Daniel Gibbs-Egan
+ *
+ *	DialogueBox() creates a dialogue box for outputing information to the player
+ *	and letting the player input information as well
+ *
+ *	helper classes :
+ *		
+ *	variables :
+ *
+ *	constructors :
+ *
+ */
+
 public class DialogueBox extends JLabel {
 
 	// add a serialVersionUID to supress warnings
@@ -68,7 +82,7 @@ public class DialogueBox extends JLabel {
 	 * @param hasBottom : whether to add a bottom to the outline
 	 * @return component : the same component as inputed
 	 */
-	public JComponent stylizeComponent(JComponent component, boolean hasBottom) {
+	public static JComponent stylizeComponent(JComponent component, boolean hasBottom) {
 		// Make the component's background visible
 		component.setOpaque(true); 
 		// set the component's background & foreground colors
@@ -95,9 +109,10 @@ public class DialogueBox extends JLabel {
 		// store the mouses position
 		Point mousePosition = window.getMousePosition();
 		// loop through each character of the text
-		for (int i = 1; i <= text.length(); i++) {
+		for (int i = 0; i <= text.length(); i++) {
 			// update the text to show the new character
-			setText("<html>" + text.substring(0, i) + "</html>");
+			String newText = "<html><br><br><br><center>" + text.substring(0, i) + "</center></html>";
+			setText(newText);
 			// add a delay between the next character addition, speed up if the mouse is pressed
 			delay(delayMS/((window.leftMouseInfo.isDown)? 10:1));
 		}
@@ -110,6 +125,7 @@ public class DialogueBox extends JLabel {
 			// delay for 10ms
 			delay(10); 
 		}
+		System.out.println(2);
 	}
 	
 	/**
@@ -166,7 +182,7 @@ public class DialogueBox extends JLabel {
 		// add scaling information
 		layout.add(questionBox, new Rectangle2D.Double(0,0,1,.1), new Rectangle(0,0,0,0));
 		layout.add(questionBox, 24);
-		layout.add(submitButton, new Rectangle2D.Double(0,0,1,.05), new Rectangle(0,0,0,0));
+		layout.add(submitButton, new Rectangle2D.Double(0,0,1,.075), new Rectangle(0,0,0,0));
 		layout.add(submitButton, 18);
 		
 		// add the text field and button to the page
@@ -299,9 +315,11 @@ public class DialogueBox extends JLabel {
 		return localIndexReturn;
 	}
 	/**
-	 * delay(int timeMS) : delays the current thread
+	 * delay(int timeMS) : delays the current thread for 
+	 * the given amount of milliseconds
 	 * 
-	 * @param timeMS : time to delay the current thread by in milliseconds
+	 * @param timeMS : the amount of time to delay the 
+	 * current thread by in milliseconds
 	 */
 	public void delay(int timeMS) {
 		try {
@@ -322,18 +340,15 @@ public class DialogueBox extends JLabel {
 
 		// if the location does not exist exit the method
 		if (location == null) return false;
-		
 		// get the location of the dialogue box
 		Point top = main.getLocation();
-		// move up by 30 pixels to account for the topbar
-		top.translate(0, 30);
 		
 		// get the size of the hover bar
 		Dimension sizeOfBar = hoverBar.getSize();
 		// get the bottom of the dialogue box
 		Point bottom = hoverBar.getLocation();
 		// move the bottom over to the bottom right of the hoverbar
-		bottom.translate((int)sizeOfBar.getWidth(),(int)sizeOfBar.getHeight());
+		bottom.translate((int)sizeOfBar.getWidth(),(int)sizeOfBar.getHeight()+30);
 		
 		// if the location is within the top and bottom positions
 		if ((location.getX() > top.getX() && location.getY() > top.getY()) && 
@@ -355,28 +370,35 @@ public class DialogueBox extends JLabel {
 		// format the dialogue box
 		stylizeComponent(this, true);
 		// move the text to the top of the dialogue box
-		this.setVerticalAlignment(1);
+		//this.setVerticalAlignment(1);
 		// inset the text from the edges of the box
-		this.setBorder(BorderFactory.createMatteBorder( 10, 15, 15, 15, Color.BLACK));
+		this.setBorder(BorderFactory.createMatteBorder( 25, 50, 25, 50, Color.BLACK));
 	}
 	
+	/**
+	 * DialogueBox() : creates a new DialogueBox and stores an application window 
+	 */
 	public DialogueBox(Window window) {
 		
 		// call the main constructor
 		this();
 		// update the window variable
 		this.window = window;
-
 	}
 	
+	/**
+	 * DialogueBox() : creates a new DialogueBox, adds the dialogue box to 
+	 * a page and stores a hover bar, and application window
+	 */
 	public DialogueBox(Window window, Page page, JLabel hoverBar) {
 
 		// call the window constructor
 		this(window);
-		
 		// store the hover bar
 		this.hoverBar = hoverBar;
-		
+		// center the text both vertically and horizontally
+		this.setHorizontalAlignment(CENTER);
+		this.setVerticalAlignment(TOP);
 		// add the dialogue box to the pages movement events
 		page.movementEvents.add((Page.EventRunnable) hoverEdits);
 		// add the dialogue box to the page

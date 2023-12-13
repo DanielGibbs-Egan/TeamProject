@@ -3,6 +3,27 @@ import java.util.LinkedList;
 
 import javax.swing.JLabel;
 
+/*
+ *	Daniel Gibbs-Egan
+ *
+ *	Page() creates a page for selectively visualizing 
+ *	the windows components
+ *
+ *	intefaces :
+ *		EventRunnable:
+ *			methods: 
+ *				run(MouseEvent e)
+ *	variables :
+ *		Layout layout: the layout for the page
+ *		LinkedList<> movementEvents: runnables to 
+ *			call when the mouse moves
+ *	methods :
+ *		mouseMovementEvent(MouseEvent e): call all EventRunnables 
+ *			stored in the movementEvents LinkedList<> with the 
+ *			given mouse event
+ *		update(Window window): call update on the pages layout
+ */
+
 public class Page extends JLabel {
 
 	// add a serialVersionUID to supress warnings
