@@ -13,36 +13,39 @@ import javax.swing.JFrame;
 /**
  *  <style> 
  *  tab{ margin-left: 30px; } 
- *  p{ margin-left: 30px;}
- *  start{ margin-left: -30px; }
+ *  p{ margin-left: 30px; }
  *  </style>
+ *  
  *	<center><b>Daniel Gibbs-Egan</b></center><br>
- *	Window() creates a window for visualizing <br>
- *	the game.<br>
+ *
+ *	class <b>Window</b> : a class for visualizing the game <br><tab>
+ *  	on a defined and editable area of the screen <br><tab>
+ *	    the game.<br>
  *	<br>
- *	helper classes :<br>
+ *	helper classes :
  *  <p>
-	 *	class <b>ButtonInfo</b> : stores information about a button <br>
-	 *	class <b>ButtonListener</b> : a class that listens to the <br>
-	 *  <tab> interactions of the pc's mouse with a JComponent <br>
-	 *	class <b>MouseMovementUpdates</b> : a mouse movement listener for <br>
-	 *	<tab> updating the current pages mouse movement events</tab> <br>
-	 *	class <b>WindowUpdates</b> : a generic component listener that <br>
-	 *	<tab> calls update() on the current page </tab> <br>
-	 *	class <b>MouseUpdates</b> : a mouse listener designed to update a <br>
-	 *	<tab> ButtonInfo Object with the left mouse button's <br>
-	 *	<tab> information </tab> <br>
+ *		class <b>ButtonInfo</b> : stores information about a button <br>
+ *		class <b>ButtonListener</b> : a class that listens to the <br>
+ *  	<tab> interactions of the pc's mouse with a JComponent <br>
+ *		class <b>MouseMovementUpdates</b> : a mouse movement listener for <br>
+ *		<tab> updating the current pages mouse movement events</tab> <br>
+ *		class <b>WindowUpdates</b> : a generic component listener that <br>
+ *		<tab> calls update() on the current page </tab> <br>
+ *		class <b>MouseUpdates</b> : a mouse listener designed to update a <br>
+ *		<tab> ButtonInfo Object with the left mouse button's <br>
+ *		<tab> information </tab> <br>
  *  </p>
+ *  
  *	variables :
  *  <p>
  *  	Page <b>currentPage</b> : the current page the application is showing <br>
  *  	ButtonInfo <b>leftMouseInfo</b> : stores information about the left mouse button <br>
  *  	Window <b>window</b> : the application window <br>
  *  </p>
+ *  
  *	methods :
  *	<p>
- *		
- * 		Page <b>createPage()</b> : creates a new (Page) Object <br>
+ * 		Page <b>createPage()</b> : creates a new Page Object <br>
  * 		void <b>delay(int timeMS)</b> : delays the current thread for <br><tab>
  * 			the given amount of milliseconds <br>
  * 		void <b>setCurrentPage(Page page)</b> : changes the current page <br><tab>
@@ -50,6 +53,11 @@ import javax.swing.JFrame;
  * 		void <b>updateColor(Component component, int selection)</b> : <br><tab> 
  *			colors a components background based on a selection<br>
  *  </p>
+ *  
+ *  constructors :
+ *	<p>
+ *		Window <b>Window()</b> : creates a new Window Object
+ *	</p>
  */
 
 public class Window extends JFrame {
@@ -72,11 +80,12 @@ public class Window extends JFrame {
 	 *
 	 */
 	public class ButtonInfo {
-		
+		// is the button down
 		public boolean isDown = false;
+		// has the button been clicked
 		public boolean clicked = false;
+		// can the button be clicked
 		public boolean canClick = false;
-		
 	}
 	
 	/**

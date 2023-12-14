@@ -5,17 +5,51 @@ import java.util.LinkedList;
 
 import javax.swing.JComponent;
 
-/*
- *	Daniel Gibbs-Egan
+/**
+ * 	<style> 
+ *  tab{ margin-left: 30px; } 
+ *  p{ margin-left: 30px; }
+ *  </style>
+ *  
+ *	<center><b>Daniel Gibbs-Egan</b></center><br>
  *
- *	Layout() creates a layout for adjusting components locations 
- *	and sizes relative to the window
+ *	<b>Layout</b> : a layout for adjusting components locations <br>
+ *	and sizes relative to the window <br>
+ *	<br>
  *
- *	helper classes :
- *		
+ *	helper classes : 
+ *		<p>
+ *			class <b>Data</b> : stores layout information about a component <br>
+ *			class <b>FontData</b> : stores layout information <br><tab>
+ *				about a components text <br>
+ *		</p>
+ *
  *	variables :
+ *		<p>
+ *			LinkedList<> <b>components</b> : the stored resize <br><tab> 
+ *				data of added JComponents <br>
+ *			LinkedList<> <b>fonts</b> : the stored font resize <br><tab> 
+ *				data of added JComponents <br>
+ *		</p>
  *
- *	constructors :
+ *	methods  :
+ *		<p>
+ *			void <b>add(component, scale, offset)</b> : <br><tab>
+ *					adds a new JComponent to the layout for <br><tab>
+ *					 resizing and positioning <br>
+ *			void <b>add(JComponent component, int ptsAt500px)</b> : <br><tab>
+ * 					adds a new JComponent to the layout for resizing <br><tab>
+ * 					and positioning of its text<br>
+ *			Rectangle <b>addRectangles(Rectangle... rectangles)</b> : <br><tab>
+ * 					sums the size and position of each rectange given and <br><tab>
+ *					returns it as  a new rectangle<br>
+ *			void <b>remove(JComponent component)</b> : <br><tab>
+ * 					removes a JComponent from both the components <br><tab>
+ * 					and fonts lists<br>
+ *			void <b>update(Window window)</b> : <br><tab>
+ *					update the layout and recalculate the positions,<br><tab>
+ * 					scales and text of its components <br>
+ *		</p>
  *
  */
 
