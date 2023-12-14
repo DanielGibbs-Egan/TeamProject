@@ -5,6 +5,54 @@ import java.util.LinkedList;
 
 import javax.swing.JComponent;
 
+/**
+ * 	<style> 
+ *  tab{ margin-left: 30px; } 
+ *  p{ margin-left: 30px; }
+ *  </style>
+ *  
+ *	<center><b>Daniel Gibbs-Egan</b></center><br>
+ *
+ *	<b>Layout</b> : a layout for adjusting components locations <br>
+ *	and sizes relative to the window <br>
+ *	<br>
+ *
+ *	helper classes : 
+ *		<p>
+ *			class <b>Data</b> : stores layout information about a component <br>
+ *			class <b>FontData</b> : stores layout information <br><tab>
+ *				about a components text <br>
+ *		</p>
+ *
+ *	variables :
+ *		<p>
+ *			LinkedList<> <b>components</b> : the stored resize <br><tab> 
+ *				data of added JComponents <br>
+ *			LinkedList<> <b>fonts</b> : the stored font resize <br><tab> 
+ *				data of added JComponents <br>
+ *		</p>
+ *
+ *	methods  :
+ *		<p>
+ *			void <b>add(component, scale, offset)</b> : <br><tab>
+ *					adds a new JComponent to the layout for <br><tab>
+ *					 resizing and positioning <br>
+ *			void <b>add(JComponent component, int ptsAt500px)</b> : <br><tab>
+ * 					adds a new JComponent to the layout for resizing <br><tab>
+ * 					and positioning of its text<br>
+ *			Rectangle <b>addRectangles(Rectangle... rectangles)</b> : <br><tab>
+ * 					sums the size and position of each rectange given and <br><tab>
+ *					returns it as  a new rectangle<br>
+ *			void <b>remove(JComponent component)</b> : <br><tab>
+ * 					removes a JComponent from both the components <br><tab>
+ * 					and fonts lists<br>
+ *			void <b>update(Window window)</b> : <br><tab>
+ *					update the layout and recalculate the positions,<br><tab>
+ * 					scales and text of its components <br>
+ *		</p>
+ *
+ */
+
 public class Layout {
 
 	/* Helper Classes */
@@ -203,6 +251,15 @@ public class Layout {
 			rectangle = addRectangles(rectangle, data.offset);
 			// create a new rectangle a distance of position the component as low as allowed
 			Rectangle position = new Rectangle(0, bounds.height - height - rectangle.height, 0, 0);
+			// find the distance from the top of the component to the top of the window
+			int distanceFromTop = bounds.height - (height + rectangle.height);
+			// check if the component passed the top
+			if (distanceFromTop < 0) {
+				// set the position to the top
+				position.setLocation(0, 0);
+				// shrink the size of the element so it is contained in the window
+				rectangle.setSize(rectangle.width, bounds.height-height);
+			}
 			// increase the current height by the height of the rectangle
 			height = height + rectangle.height;
 			// add the position rectangle to the scale & offset rectangles

@@ -3,6 +3,39 @@ import java.util.LinkedList;
 
 import javax.swing.JLabel;
 
+/**
+ * 	<style> 
+ *  tab{ margin-left: 30px; } 
+ *  p{ margin-left: 30px; }
+ *  </style>
+ *  
+ *	<center><b>Daniel Gibbs-Egan</b></center><br>
+ *
+ *	<b>Page</b> : a component for selectively visualizing <br>
+ *	the windows components <br>
+ *	<br>
+ *	intefaces :
+ *		<p>
+ *		EventRunnable: <br><tab>
+ *				methods:    <br><tab><tab>
+ *					run(MouseEvent e)
+ *		</p>
+ *	variables :
+ *		<p>
+ *		Layout <b>layout</b> : the layout for the page  <br>
+ *		LinkedList<> <b>movementEvents</b> : runnables to  <br><tab>
+ *			call when the mouse moves 
+ *		</p>
+ *	methods :
+ *		<p>
+ *		void <b>mouseMovementEvent(MouseEvent e)</b> : call all <br><tab>
+ *			EventRunnables stored in the movementEvents <br><tab>
+ *			LinkedList<> with the given mouse event <br>
+ *		void <b>update(Window window)</b> : call the <br><tab>
+ *			update method of the page's layout <br>
+ *		</p>
+ */
+
 public class Page extends JLabel {
 
 	// add a serialVersionUID to supress warnings

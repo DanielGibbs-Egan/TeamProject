@@ -10,18 +10,54 @@ import java.util.TimerTask;
 
 import javax.swing.JFrame;
 
-/*
- *	Daniel Gibbs-Egan
+/**
+ *  <style> 
+ *  tab{ margin-left: 30px; } 
+ *  p{ margin-left: 30px; }
+ *  </style>
+ *  
+ *	<center><b>Daniel Gibbs-Egan</b></center><br>
  *
- *	Window() creates a window for visualizing 
- *	the game.
- *
+ *	class <b>Window</b> : a class for visualizing the game <br><tab>
+ *  	on a defined and editable area of the screen <br><tab>
+ *	    the game.<br>
+ *	<br>
  *	helper classes :
- *		
+ *  <p>
+ *		class <b>ButtonInfo</b> : stores information about a button <br>
+ *		class <b>ButtonListener</b> : a class that listens to the <br>
+ *  	<tab> interactions of the pc's mouse with a JComponent <br>
+ *		class <b>MouseMovementUpdates</b> : a mouse movement listener for <br>
+ *		<tab> updating the current pages mouse movement events</tab> <br>
+ *		class <b>WindowUpdates</b> : a generic component listener that <br>
+ *		<tab> calls update() on the current page </tab> <br>
+ *		class <b>MouseUpdates</b> : a mouse listener designed to update a <br>
+ *		<tab> ButtonInfo Object with the left mouse button's <br>
+ *		<tab> information </tab> <br>
+ *  </p>
+ *  
  *	variables :
- *
- *	constructors :
- *
+ *  <p>
+ *  	Page <b>currentPage</b> : the current page the application is showing <br>
+ *  	ButtonInfo <b>leftMouseInfo</b> : stores information about the left mouse button <br>
+ *  	Window <b>window</b> : the application window <br>
+ *  </p>
+ *  
+ *	methods :
+ *	<p>
+ * 		Page <b>createPage()</b> : creates a new Page Object <br>
+ * 		void <b>delay(int timeMS)</b> : delays the current thread for <br><tab>
+ * 			the given amount of milliseconds <br>
+ * 		void <b>setCurrentPage(Page page)</b> : changes the current page <br><tab>
+ * 			to the given page<br>
+ * 		void <b>updateColor(Component component, int selection)</b> : <br><tab> 
+ *			colors a components background based on a selection<br>
+ *  </p>
+ *  
+ *  constructors :
+ *	<p>
+ *		Window <b>Window()</b> : creates a new Window Object
+ *	</p>
  */
 
 public class Window extends JFrame {
@@ -33,118 +69,28 @@ public class Window extends JFrame {
 	
 	/**
 	 * 	<style>
-	 * tab{
-	 *		margin-left: 30px;
-	 * }
-	 * </style>
-	 * 	ButtonInfo: stores information about the pc's mouse<br>
+	 *		tab{ margin-left: 30px; }
+	 * 	</style>
+	 * 	class <b>ButtonInfo</b> : stores information about the pc's mouse<br>
 	 *	<br>
-	 *	variables:<br> 	
-	 *	<tab> isDown: the state of the left mouse button <br> 	
-	 *	<tab> clicked: if the left mouse button has recently been clicked <br>	
-	 *	<tab> canClick: if the left mouse button is able to click
+	 *	variables :<br> 	
+	 *	<tab> boolean <b>isDown</b> : the state of the left mouse button <br> 	
+	 *	<tab> boolean <b>clicked</b> : if the left mouse button has recently been clicked <br>	
+	 *	<tab> boolean <b>canClick</b> : if the left mouse button is able to click <br>
 	 *
 	 */
 	public class ButtonInfo {
-		
+		// is the button down
 		public boolean isDown = false;
+		// has the button been clicked
 		public boolean clicked = false;
+		// can the button be clicked
 		public boolean canClick = false;
-		
 	}
 	
 	/**
-	 * WindowUpdates: a component listener for the application
-	 */
-	public class WindowUpdates implements ComponentListener {
-
-		public void componentHidden(ComponentEvent e) {}
-		public void componentMoved(ComponentEvent e) {}
-		public void componentResized(ComponentEvent e) {
-			// do not proceed if the current page is null
-			if (currentPage == null) return; 
-			// update the current page
-			currentPage.update(window);
-		}
-		public void componentShown(ComponentEvent e) {}
-		
-	}
-	
-	/**
-	 * MouseUpdates: a mouse listener for the application
-	 */
-	private class MouseUpdates implements MouseListener {
-		// a timer to add delayed deactivation
-		Timer clickTimer = new Timer(); 
-		
-		@Override
-		public void mouseClicked(MouseEvent e) {}
-		public void mousePressed(MouseEvent e) {
-			// if the button pressed is the left mouse button 
-			if (e.getButton() == 1) {
-				
-					leftMouseInfo.isDown = true; // update the buttons variable
-					
-					leftMouseInfo.canClick = true; // let the mouse click
-					
-					// set canClick to false after 220 ms
-					clickTimer.schedule(
-						new TimerTask() {
-							public void run() {
-								// set canClick to false
-								leftMouseInfo.canClick = false;
-							}
-						}, 
-						220
-					);
-					
-			}
-		}
-		public void mouseReleased(MouseEvent e) {
-		
-			// if the left mouse button is down and the 
-			// released button was the left mouse button
-			if (leftMouseInfo.isDown && e.getButton() == 1) {
-				// check if the button is able to click
-				if (leftMouseInfo.canClick) {
-					// set clicked to true
-					leftMouseInfo.clicked = true;
-					// set clicked to false after 10 ms
-					clickTimer.schedule(new TimerTask() {
-						public void run() {
-							// set clicked to false
-							leftMouseInfo.clicked = false;
-						}
-					}, 10);
-					
-				} 
-				// the left mouse button was released
-				leftMouseInfo.isDown = false; 
-			}
-		}
-		public void mouseEntered(MouseEvent e) {}
-		public void mouseExited(MouseEvent e) {}
-		
-	}
-	
-	/**
-	 * MouseMovementUpdates: a mouse movement listener for the application
-	 */
-	private class MouseMovementUpdates implements MouseMotionListener {
-
-		public void mouseDragged(MouseEvent e) {}
-		public void mouseMoved(MouseEvent e) {
-			// if the current page exists
-			if (currentPage == null) return;
-			// call the current page's mouseMovementEvent()
-			currentPage.mouseMovementEvent(e);
-		}
-		
-	}
-	
-	/**
-	 * 	class <b>ButtonListener</b> : a class that listens to <br>
-	 * 	the interactions of the pc's mouse with a JComponent <br>
+	 * 	class <b>ButtonListener</b> : a class that listens to the <br>
+	 *  interactions of the pc's mouse with a JComponent <br>
 	 *	<br>
 	 *	when the mouse clicks calls the runnable <br>
 	 */
@@ -202,15 +148,175 @@ public class Window extends JFrame {
 		public void mouseClicked(MouseEvent e) {}
 	}
 	
+	/**
+	 *  <style> tab{ margin-left: 30px; } </style>
+	 * 	class <b>MouseMovementUpdates</b> : a mouse movement listener <br>
+	 * 	<tab>for updating the current pages mouse movement events <br>
+	 */
+	private class MouseMovementUpdates implements MouseMotionListener {
+
+		public void mouseDragged(MouseEvent e) {}
+		public void mouseMoved(MouseEvent e) {
+			// if the current page exists
+			if (currentPage == null) return;
+			// call the current page's mouseMovementEvent()
+			currentPage.mouseMovementEvent(e);
+		}
+		
+	}
+
+	/**
+	 * 	<style> tab{ margin-left: 30px; } </style>
+	 * 	class <b>MouseUpdates</b> : a mouse listener designed to update a <br>
+	 * 	<tab> ButtonInfo Object with teh left mouse button's information <br>
+	 */
+	private class MouseUpdates implements MouseListener {
+		// a timer to add delayed deactivation
+		Timer clickTimer = new Timer(); 
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {}
+		public void mousePressed(MouseEvent e) {
+			// if the button pressed is the left mouse button 
+			if (e.getButton() == 1) {
+					// update the buttons variable
+					leftMouseInfo.isDown = true; 
+					// let the mouse click
+					leftMouseInfo.canClick = true; 
+					
+					// set canClick to false after 220 ms
+					clickTimer.schedule(
+						new TimerTask() {
+							public void run() {
+								// set canClick to false
+								leftMouseInfo.canClick = false;
+							}
+						}, 
+						220
+					);
+					
+			}
+		}
+		public void mouseReleased(MouseEvent e) {
+		
+			// if the left mouse button is down and the 
+			// released button was the left mouse button
+			if (leftMouseInfo.isDown && e.getButton() == 1) {
+				// check if the button is able to click
+				if (leftMouseInfo.canClick) {
+					// set clicked to true
+					leftMouseInfo.clicked = true;
+					// set clicked to false after 10 ms
+					clickTimer.schedule(new TimerTask() {
+						public void run() {
+							// set clicked to false
+							leftMouseInfo.clicked = false;
+						}
+					}, 10);
+					
+				} 
+				// the left mouse button was released
+				leftMouseInfo.isDown = false; 
+			}
+		}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
+		
+	}
+	
+	/**
+	 * <style> tab{ margin-left: 30px; } </style>
+	 * 	class <b>WindowUpdates</b>: a component listener that<br>
+	 *	<tab> calls update() on the current page<br>
+	 */
+	public class WindowUpdates implements ComponentListener {
+
+		public void componentResized(ComponentEvent e) {
+			// do not proceed if the current page is null
+			if (currentPage == null) return; 
+			// update the current page
+			currentPage.update(window);
+		}
+		public void componentHidden(ComponentEvent e) {}
+		public void componentMoved(ComponentEvent e) {}
+		public void componentShown(ComponentEvent e) {}
+		
+	}
+	
 	/* Variables */
-	
-	ButtonInfo leftMouseInfo = new ButtonInfo(); // stores info about the mouse
-	
-	Window window = this; // this object
-	
-	Page currentPage; // the currently open page
+
+	// the currently open page
+	Page currentPage; 
+	// stores info about the mouse
+	ButtonInfo leftMouseInfo = new ButtonInfo(); 
+	// this object
+	Window window = this; 
 
 	/* Methods */
+	
+	/**
+	 * createPage() : creates a new (Page)
+	 * 
+	 * @return a new (Page) with default settings
+	 */
+	public Page createPage() {
+		// create a new page
+		Page newPage = new Page(); 
+			// make the page opaque
+			newPage.setOpaque(true); 
+			// default the pages background color to black
+			newPage.setBackground(Color.BLACK); 
+			// update the page
+			newPage.update(window); 
+			// render the page
+			newPage.paint(getGraphics()); 
+		// return the new page
+		return newPage; 
+	}
+	
+	/**
+	 * delay(int timeMS) : delays the current thread for 
+	 * the given amount of milliseconds
+	 * 
+	 * @param timeMS : the amount of time to delay the 
+	 * current thread by in milliseconds
+	 */
+	public void delay(int timeMS) {
+		try {
+			// put the thread to sleep for timeMS milliseconds
+			Thread.sleep(timeMS); 
+		} catch (InterruptedException e) {
+			//delay was impossible
+		}
+	}
+	
+	/**
+	 * setCurrentPage(Page page) : changes the current page to the given page
+	 * 
+	 * @param page : the page to replace the current page with
+	 */
+	public void setCurrentPage(Page page) {
+		// obtain the old page
+		Page oldPage = currentPage; 
+		// if the old page exists
+		if (oldPage != null) { 
+			// remove it from the window
+			window.remove(oldPage); 
+		}
+		// set the current page to the new page
+		currentPage = page; 
+		// end the method if the new page is null
+		if (currentPage == null) return; 
+		// add the new page to the window
+		window.add(currentPage); 
+		// update the page
+		currentPage.update(window); 
+		// make sure the page covers the window
+		currentPage.setSize(window.getContentPane().getSize()); 
+		// update the visuals
+		window.repaint(); 
+		
+	}
 	
 	/**
 	 * 	updateColor(Component component, int selection) : colors a components
@@ -230,55 +336,6 @@ public class Window extends JFrame {
 			// set the background color to an very dark gray
 			component.setBackground(Color.getHSBColor(0, 0, 0.14f));
 		}
-	}
-	
-	/**
-	 * delay(int timeMS) : delays the current thread for the given milliseconds
-	 * 
-	 * @param timeMS : the amount of time to delay in milliseconds
-	 */
-	public void delay(int timeMS) {
-		try {
-			Thread.sleep(timeMS);
-		} catch (InterruptedException e) {
-			//delay was impossible
-		}
-	}
-
-	/**
-	 * createPage() : creates a new (Page)
-	 * 
-	 * @return a new (Page) with default settings
-	 */
-	public Page createPage() {
-		Page newPage = new Page(); // create a new page
-			newPage.setOpaque(true); // make the page opaque
-			// default the pages background color to black
-			newPage.setBackground(Color.BLACK); 
-			newPage.update(window); // update the page
-			newPage.paint(getGraphics()); // render the page
-		return newPage; // return the new page
-	}
-	
-	/**
-	 * setCurrentPage(Page page) : changes the current page to the given page
-	 * 
-	 * @param page : the page to replace the current page with
-	 */
-	public void setCurrentPage(Page page) {
-		
-		Page oldPage = currentPage; // obtain the old page
-		if (oldPage != null) { // if the old page exists
-			window.remove(oldPage); // remove it from the window
-		}
-		currentPage = page; // set the current page to the new page
-		if (currentPage == null) return; // end the method if the new page is null
-		window.add(currentPage); // add the new page to the window
-		currentPage.update(window); // update the page
-		// make sure the page covers the window
-		currentPage.setSize(window.getContentPane().getSize()); 
-		window.repaint(); // update the visuals
-		
 	}
 	
 	/* Contructors */
