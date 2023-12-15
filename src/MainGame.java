@@ -7,7 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class NicolesCopyOfDanielsFile {
+public class MainGame {
 	
 	public static int a = 1;
 	public static int randomInt(int low, int high) {
