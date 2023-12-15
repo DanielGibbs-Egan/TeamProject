@@ -19,7 +19,7 @@ import javax.swing.JFrame;
  *	<center><b>Daniel Gibbs-Egan</b></center><br>
  *
  *	class <b>Window</b> : a class for visualizing the game <br><tab>
- *  	on a defined and editable area of the screen <br><tab>
+ *  	on a defined but editable area of the screen <br><tab>
  *	    the game.<br>
  *	<br>
  *	helper classes :
