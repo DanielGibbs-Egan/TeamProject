@@ -139,7 +139,7 @@ public class MainGame {
 
 		// add dialogue to the box
 
-		dialogueBox.addDialogue("Welcome! Will you be able to find love?");	
+		dialogueBox.addDialogue("Welcome! Your story will start from here.");	
 
 		//dialogueBox.addDialogue("Hello World!, Dialogue Text Box Testing! Hello World!, Dialogue Text Box Testing!");	
 
@@ -279,6 +279,8 @@ public class MainGame {
 			a.newEvent(names[randomCandidate], 0, -2);
 		}
 		else {
+			dialogueBox.addDialogue("When you gave " + date + " the present, " + " he gave you his thanks. "
+					+ "You sighed in relief that it didn't went badly.");
 			a.newEvent(names[0], 1, 1);
 		}
 
@@ -298,9 +300,11 @@ public class MainGame {
 		}
 		if(questions2[selection2] == badDate) {
 			dialogueBox.addDialogue(date + " didn't enjoy the date. It was very awkward back there.");
-			a.newEvent(names[randomCandidate], 0, -1);
+			a.newEvent(names[randomCandidate], 0, -2);
 		}
 		else {
+			dialogueBox.addDialogue("After the two of you spent a whole day with each other, " + date 
+					+ " called a cab for you to head home and bid you goodbye.");
 			a.newEvent(names[randomCandidate], 1, 1);
 		}
 		
