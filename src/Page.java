@@ -12,7 +12,7 @@ import javax.swing.JLabel;
  *	<center><b>Daniel Gibbs-Egan</b></center><br>
  *
  *	<b>Page</b> : a component for selectively visualizing <br>
- *	the windows components <br>
+ *	the components of the window<br>
  *	<br>
  *	intefaces :
  *		<p>
