@@ -51,7 +51,7 @@ public class NicolesCopyOfDanielsFile {
 		/* Main Menu */
 		
 		// create a label to show the title of the game
-		JLabel title = new JLabel("Game Title");
+		JLabel title = new JLabel("Potato Dating");
 		// set the font to monospaced
 		title.setFont(new Font("Monospaced", 1, 36));
 		// set the text color to white
@@ -138,14 +138,19 @@ public class NicolesCopyOfDanielsFile {
 		endPage.layout.add(displayText, 36);
 
 		// add dialogue to the box
-		dialogueBox.addDialogue("Hello World!, Dialogue Text Box Testing! Hello World!, Dialogue Text Box Testing!");	
+		dialogueBox.addDialogue("Welcome to Couch Potatoes' Dating Simulator");	
 
 		// ask the player for a string input
 		String input = dialogueBox.askQuestion("What is your name?", gamePage.layout);
 		
 		// respond by clarifiying the player's input
 		dialogueBox.addDialogue("Your Name Is: " + input);
-		int randomCanidate = Bachelor.randomNum(0, 3);
+		// create a new array of questions
+		String[] questions0 = {"Homer","Hank","Peter"};
+		// ask a question and give an array of possible answers
+		Integer selection0 = dialogueBox.addQuestionaire(input +", who do you want to date?", gamePage.layout, questions0);
+		
+		int randomCanidate = selection0;
 		String date = names[randomCanidate];
 		String likedLetter = null;
 		String dislikedLetter = null;
@@ -222,11 +227,11 @@ public class NicolesCopyOfDanielsFile {
 		dialogueBox.addDialogue("You Chose: " + questions[selection]);
 		if(questions[selection] == likedLetter) {
 
-			dialogueBox.addDialogue("Good choice");
+			dialogueBox.addDialogue(date + " liked that. Good choice");
 			a.newEvent(names[randomCanidate], 0, 1);
 		}
 		if(questions[selection] == dislikedLetter) {
-			dialogueBox.addDialogue("Uh oh, he didn't like that");
+			dialogueBox.addDialogue("Uh oh, " + date + " didn't like that");
 			a.newEvent(names[randomCanidate], 0, -2);
 		}
 		else {
@@ -243,11 +248,11 @@ public class NicolesCopyOfDanielsFile {
 		dialogueBox.addDialogue("You Chose: " + questions2[selection2]);
 		if(questions2[selection2] == likedLetter ) {
 
-			dialogueBox.addDialogue("Good choice");
+			dialogueBox.addDialogue(date + " liked that. Good choice");
 			a.newEvent(names[randomCanidate], 0, 1);
 		}
 		if(questions2[selection2] == dislikedLetter) {
-			dialogueBox.addDialogue("Uh oh, he didn't like that");
+			dialogueBox.addDialogue("Uh oh, " + date + " didn't like that");
 			a.newEvent(names[randomCanidate], 0, -2);
 		}
 		else {
@@ -256,7 +261,7 @@ public class NicolesCopyOfDanielsFile {
 		
 		if(a.hasReachedScore(names[randomCanidate], 0, 2)) {
 			dialogueBox.addDialogue("You have romanced " + date);
-			dialogueBox.addDialogue("Here's a random spongebob line as a reward");
+			dialogueBox.addDialogue(b.dialogueMap().get(1));
 			dialogueBox.addDialogue(b.dialogueMap().get(Bachelor.randomNum(11,32)));
 		}
 		else if(a.hasReachedScore(names[randomCanidate], 0, -1)) {
