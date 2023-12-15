@@ -53,16 +53,16 @@ public class Bachelor {
 	}
 	//This is to test the random number bit ignore it
 	public static void main(String[] args) {
-		System.out.println(randomNum(0,3));
-		System.out.println(randomNum(0,3));
-		System.out.println(randomNum(0,3));
-		System.out.println(randomNum(0,3));
-		System.out.println(randomNum(0,3));
-		System.out.println(randomNum(0,3));
-		System.out.println(randomNum(0,3));
-		System.out.println(randomNum(0,3));
-		System.out.println(randomNum(0,3));
-		System.out.println(randomNum(0,3));
+		System.out.println(randomNum(0,2));
+		System.out.println(randomNum(0,2));
+		System.out.println(randomNum(0,2));
+		System.out.println(randomNum(0,2));
+		System.out.println(randomNum(0,2));
+		System.out.println(randomNum(0,2));
+		System.out.println(randomNum(0,2));
+		System.out.println(randomNum(0,2));
+		System.out.println(randomNum(0,2));
+		System.out.println(randomNum(0,2));
 
 	}
 

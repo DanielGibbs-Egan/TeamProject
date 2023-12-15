@@ -65,11 +65,21 @@ public class RelationshipTracker {
 		else {
 			throw new IllegalArgumentException(type + " isn't a valid relationship type");
 		}
-		if(score < desiredScore) {
-			return false;
+		if(desiredScore >= 0) {
+			if(score < desiredScore) {
+				return false;
+			}
+			else {
+				return true;
+			}
 		}
 		else {
-			return true;
+			if(score > desiredScore) {
+				return false;
+			}
+			else {
+				return true;
+			}
 		}
 	}
 	//This method lets you print out all of the bachelor names that are stored in an array you feed in

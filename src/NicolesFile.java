@@ -50,7 +50,11 @@ public class NicolesFile {
 		a.fillOutMap(namesTwo);
 		
 		//newEvent lets you add scores to the bachelors. See RelationshipTracker for more information
-		a.newEvent(names[0], 0, 3);
+		//a.newEvent(names[0], 0, 3);
+		a.newEvent(names[0], 1, 1);
+		a.newEvent(names[0], 1, -2);
+		System.out.println(a.getScore(names[0], 1));
+		System.out.println(a.hasReachedScore(names[0], 1, -1));
 		a.newEvent(namesTwo[1], 0, 20);
 		a.newEvent(names[0], 0, 9);
 		
