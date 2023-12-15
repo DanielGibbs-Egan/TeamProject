@@ -42,7 +42,7 @@ public class DanielsFile {
 		/* Main Menu */
 		
 		// create a label to show the title of the game
-		JLabel title = new JLabel("Game Title");
+		JLabel title = new JLabel("Lovers or Not?");
 		// set the font to monospaced
 		title.setFont(new Font("Monospaced", 1, 36));
 		// set the text color to white
@@ -129,13 +129,13 @@ public class DanielsFile {
 		endPage.layout.add(displayText, 36);
 
 		// add dialogue to the box
-		dialogueBox.addDialogue("Hello World!, Dialogue Text Box Testing! Hello World!, Dialogue Text Box Testing!");	
+		dialogueBox.addDialogue("Welcome! Your journey starts here!");	
 
 		// ask the player for a string input
 		String input = dialogueBox.askQuestion("What is your name?", gamePage.layout);
 		
 		// respond by clarifiying the player's input
-		dialogueBox.addDialogue("Your Name Is: " + input);
+		dialogueBox.addDialogue("Hello, " + input + "! It's nice to meet you.");
 		
 		// create a new array of questions
 		String[] questions = {"A","B","C"};
