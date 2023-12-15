@@ -20,11 +20,11 @@ public class NicolesCopyOfDanielsFile {
 		DialogueStuff b = new DialogueStuff();
 		b.dialogueMapFill();
 		String[] names = new String[3];
-		Bachelor One = new Bachelor("Homer", Bachelor.randomNum(0,3), Bachelor.randomNum(0, 3));
+		Bachelor One = new Bachelor("Alex", Bachelor.randomNum(0,3), Bachelor.randomNum(0, 3));
 		names[0] = One.getName();
-		Bachelor Two = new Bachelor("Hank", Bachelor.randomNum(0,3), Bachelor.randomNum(0,3));
+		Bachelor Two = new Bachelor("Chase", Bachelor.randomNum(0,3), Bachelor.randomNum(0,3));
 		names[1] = Two.getName();
-		Bachelor Three = new Bachelor("Peter", Bachelor.randomNum(0,3), Bachelor.randomNum(0,3));
+		Bachelor Three = new Bachelor("Sirius", Bachelor.randomNum(0,3), Bachelor.randomNum(0,3));
 		names[2] = Three.getName();
 		RelationshipTracker a = new RelationshipTracker();
 		a.fillOutMap(names);
@@ -51,7 +51,7 @@ public class NicolesCopyOfDanielsFile {
 		/* Main Menu */
 		
 		// create a label to show the title of the game
-		JLabel title = new JLabel("Potato Dating");
+		JLabel title = new JLabel("Lovers or Not?");
 		// set the font to monospaced
 		title.setFont(new Font("Monospaced", 1, 36));
 		// set the text color to white
@@ -139,7 +139,7 @@ public class NicolesCopyOfDanielsFile {
 
 		// add dialogue to the box
 
-		dialogueBox.addDialogue("Welcome to Couch Potatoes' Dating Simulator");	
+		dialogueBox.addDialogue("Welcome! Will you be able to find love?");	
 
 		//dialogueBox.addDialogue("Hello World!, Dialogue Text Box Testing! Hello World!, Dialogue Text Box Testing!");	
 
@@ -148,131 +148,172 @@ public class NicolesCopyOfDanielsFile {
 		String input = dialogueBox.askQuestion("What is your name?", gamePage.layout);
 		
 		// respond by clarifiying the player's input
-		dialogueBox.addDialogue("Your Name Is: " + input);
+		dialogueBox.addDialogue("Nice to meet you, " + input + ".");
 		// create a new array of questions
-		String[] questions0 = {"Homer","Hank","Peter"};
+		String[] questions0 = {"Alex","Chase","Sirius"};
 		// ask a question and give an array of possible answers
-		Integer selection0 = dialogueBox.addQuestionaire(input +", who do you want to date?", gamePage.layout, questions0);
+		Integer selection0 = dialogueBox.addQuestionaire(input +", choose your path in the game. "
+				+ "Whom do you want to pursue a relationship with?", gamePage.layout, questions0);
 		
-		int randomCanidate = selection0;
-		String date = names[randomCanidate];
+		int randomCandidate = selection0;
+		String date = names[randomCandidate];
 		String likedLetter = null;
 		String dislikedLetter = null;
-		if(randomCanidate == 0) {
+		String goodPresent = null;
+		String badPresent = null;
+		String goodDate = null;
+		String badDate = null;
+		if(randomCandidate == 0) {
 			if(One.getTraitOne() == 0) {
-				likedLetter = "A";
+				likedLetter = "coffee";
+				goodPresent = "a pack of Colombian Arabica coffee";
+				goodDate = "Starbucks roastery";
 			}
 			if(One.getTraitOne() == 1) {
-				likedLetter = "B";
+				likedLetter = "animals";
+				goodPresent = "a kitten";
+				goodDate = "aquarium";
 			}
 			if(One.getTraitOne() == 2) {
-				likedLetter = "C";
+				likedLetter = "playing sports";
+				goodPresent = "a ticket to a baseball game";
+				goodDate = "ice skating rink";
 			}
 		}
 
-		if(randomCanidate == 1) {
+		if(randomCandidate == 1) {
 			if(Two.getTraitOne() == 0) {
-				likedLetter = "A";
+				likedLetter = "coffee";
+				goodPresent = "a pack of Colombian Arabica coffee";
+				goodDate = "Starbucks roastery";
 			}
 			if(Two.getTraitOne() == 1) {
-				likedLetter = "B";
+				likedLetter = "animals";
+				goodPresent = "a kitten";
+				goodDate = "aquarium";
 			}
 			if(Two.getTraitOne() == 2) {
-				likedLetter = "C";
+				likedLetter = "playing sports";
+				goodPresent = "a ticket to a baseball game";
+				goodDate = "ice skating rink";
 			}
 		}
 		
-		if(randomCanidate == 2) {
+		if(randomCandidate == 2) {
 			if(Three.getTraitOne() == 0) {
-				likedLetter = "A";
+				likedLetter = "coffee";
+				goodPresent = "a pack of Colombian Arabica coffee";
+				goodDate = "Starbucks roastery";
 			}
 			if(Three.getTraitOne() == 1) {
-				likedLetter = "B";
+				likedLetter = "animals";
+				goodPresent = "a kitten";
+				goodDate = "aquarium";
 			}
 			if(Three.getTraitOne() == 2) {
-				likedLetter = "C";
+				likedLetter = "playing sports";
+				goodPresent = "a ticket to a baseball game";
+				goodDate = "ice skating rink";
 			}
 		}
-		if(likedLetter == "A") {
+		if(likedLetter == "coffee") {
 			if(Bachelor.randomNum(0, 2) == 0) {
-				dislikedLetter = "B";
+				dislikedLetter = "animals";
+				badPresent = "a kitten";
+				badDate = "aquarium";
 			}
 			else {
-				dislikedLetter = "C";
+				dislikedLetter = "playing sports";
+				badPresent = "a ticket to a baseball game";
+				badDate = "ice skating rink";
 			}
 		}
-		if(likedLetter == "B") {
+		if(likedLetter == "animals") {
 			if(Bachelor.randomNum(0, 2) == 0) {
-				dislikedLetter = "C";
+				dislikedLetter = "playing sports";
+				badPresent = "a ticket to a baseball game";
+				badDate = "ice skating rink";
 			}
 			else {
-				dislikedLetter = "A";
+				dislikedLetter = "coffee";
+				badPresent = "a pack of Colombian Arabica coffee";
+				badDate = "Starbucks roastery";
 			}
 		}
-		if(likedLetter == "C") {
+		if(likedLetter == "playing sports") {
 			if(Bachelor.randomNum(0, 2) == 0) {
-				dislikedLetter = "A";
+				dislikedLetter = "coffee";
+				badPresent = "a pack of Colombian Arabica coffee";
+				badDate = "Starbucks roastery";
 			}
 			else {
-				dislikedLetter = "B";
+				dislikedLetter = "animals";
+				badPresent = "a kitten";
+				badDate = "aquarium";
 			}
 		}
 		
 		
-		dialogueBox.addDialogue( input + ", You will be dating " + date + " (hint: he loves the letter " + likedLetter + " but HATES the letter " + dislikedLetter + ")");
+		dialogueBox.addDialogue( input + ", you will be dating " + date + ". After the two of you met and "
+				+ "chatted, you learn that he loves " + likedLetter + " but dislikes " + dislikedLetter + ".");
+		
+		dialogueBox.addDialogue("He is very funny and outgoing, so the two of you quickly "
+				+ "became friends. As luck would have it, " + date + " lives near your place, so you "
+				+ "and him often hang out after work.");	
 		
 		// create a new array of questions
-		String[] questions = {"A","B","C"};
+		String[] questions = {"a pack of Colombian Arabica coffee","a kitten","a ticket to a baseball game","a new pair of socks"};
 		// ask a question and give an array of possible answers
-		Integer selection = dialogueBox.addQuestionaire("A, B, or C", gamePage.layout, questions);
+		Integer selection = dialogueBox.addQuestionaire("Months flew by, and today it is " + date + "'s birthday. You want to give him something special."
+				+ " What should you pick to be his present?", gamePage.layout, questions);
 
 		// respond by clarifiying the player's input by obtaining the 
 		// information stored at the selections index in the array
-		dialogueBox.addDialogue("You Chose: " + questions[selection]);
-		if(questions[selection] == likedLetter) {
-
-			dialogueBox.addDialogue(date + " liked that. Good choice");
-			a.newEvent(names[randomCanidate], 0, 1);
+		dialogueBox.addDialogue("You decided to give " + date + " " + questions[selection] + ".");
+		if(questions[selection] == goodPresent) {
+			dialogueBox.addDialogue(date + " was very happy. He loves spending time with you.");
+			a.newEvent(names[randomCandidate], 0, 1);
 		}
-		if(questions[selection] == dislikedLetter) {
-			dialogueBox.addDialogue("Uh oh, " + date + " didn't like that");
-			a.newEvent(names[randomCanidate], 0, -2);
+		if(questions[selection] == badPresent) {
+			dialogueBox.addDialogue("Uh oh, " + date + " didn't seem to like your present. Better luck next time.");
+			a.newEvent(names[randomCandidate], 0, -2);
 		}
 		else {
 			a.newEvent(names[0], 1, 1);
 		}
 
 		// create a new array of questions
-		String[] questions2 = {"A", "B", "C", "D"};
+		String[] questions2 = {"ice skating rink", "aquarium", "Starbucks roastery","cinema"};
 		// ask a question and give an array of possible answers
-		Integer selection2 = dialogueBox.addQuestionaire("A,B,C, or D", gamePage.layout, questions2);
+		Integer selection2 = dialogueBox.addQuestionaire("Not long after, you propose to " + date + " that the two of you go on a date. "
+				+ "Where will your date be?", gamePage.layout, questions2);
 
 		// respond by clarifiying the player's input by obtaining the 
 		// information stored at the selections index in the array
-		dialogueBox.addDialogue("You Chose: " + questions2[selection2]);
-		if(questions2[selection2] == likedLetter ) {
+		dialogueBox.addDialogue("You and " + date + " went to the " + questions2[selection2] + ".");
+		if(questions2[selection2] == goodDate ) {
 
-			dialogueBox.addDialogue(date + " liked that. Good choice");
-			a.newEvent(names[randomCanidate], 0, 1);
+			dialogueBox.addDialogue("The two of you had a blast. " + date + " can't wait to go on another date with you.");
+			a.newEvent(names[randomCandidate], 0, 1);
 		}
-		if(questions2[selection2] == dislikedLetter) {
-			dialogueBox.addDialogue("Uh oh, " + date + " didn't like that");
-			a.newEvent(names[randomCanidate], 0, -2);
+		if(questions2[selection2] == badDate) {
+			dialogueBox.addDialogue(date + " didn't enjoy the date. It was very awkward back there.");
+			a.newEvent(names[randomCandidate], 0, -1);
 		}
 		else {
-			a.newEvent(names[randomCanidate], 1, 1);
+			a.newEvent(names[randomCandidate], 1, 1);
 		}
 		
-		if(a.hasReachedScore(names[randomCanidate], 0, 2)) {
-			dialogueBox.addDialogue("You have romanced " + date);
+		if(a.hasReachedScore(names[randomCandidate], 0, 2)) {
+			dialogueBox.addDialogue("You and " + date + " are now officially lovers!");
 			dialogueBox.addDialogue(b.dialogueMap().get(1));
 			dialogueBox.addDialogue(b.dialogueMap().get(Bachelor.randomNum(11,32)));
 		}
-		else if(a.hasReachedScore(names[randomCanidate], 0, -1)) {
-			dialogueBox.addDialogue(date + " hates you");
+		else if(a.hasReachedScore(names[randomCandidate], 0, -1)) {
+			dialogueBox.addDialogue(date + " rejects your proposal to be lovers. Better luck next time.");
 		}
 		else {
-			dialogueBox.addDialogue(date + " likes you better as a friend");
+			dialogueBox.addDialogue(date + " doesn't have any romantic feelings for you, but the two of you are good friends.");
 		}
 		
 		
