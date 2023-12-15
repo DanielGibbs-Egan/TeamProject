@@ -138,7 +138,11 @@ public class NicolesCopyOfDanielsFile {
 		endPage.layout.add(displayText, 36);
 
 		// add dialogue to the box
+
 		dialogueBox.addDialogue("Welcome to Couch Potatoes' Dating Simulator");	
+
+		//dialogueBox.addDialogue("Hello World!, Dialogue Text Box Testing! Hello World!, Dialogue Text Box Testing!");	
+
 
 		// ask the player for a string input
 		String input = dialogueBox.askQuestion("What is your name?", gamePage.layout);
@@ -271,17 +275,16 @@ public class NicolesCopyOfDanielsFile {
 			dialogueBox.addDialogue(date + " likes you better as a friend");
 		}
 		
-		// add dialogue to the text box
-		dialogueBox.addDialogue("Thank You for Playing! =)");
 		
 		// display text on the end game page
 		displayText.setText(
 				"<html><center>"
-				+ "Game Over!<br>"
-				+ "Inputs: " + input + 
-				", " + questions[selection] + 
-				", " + questions2[selection2] + 
-				"</center></html>"
+				+ "Thank You<br>"
+				+ " For Playing!"
+//				+ input + 
+//				", " + questions[selection] + 
+//				", " + questions2[selection2] + 
+				+ "</center></html>"
 				);
 		
 		// set the page to the end game page
