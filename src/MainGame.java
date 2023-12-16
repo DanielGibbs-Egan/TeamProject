@@ -157,6 +157,7 @@ public class MainGame {
 		
 		int randomCandidate = selection0;
 		String date = names[randomCandidate];
+		// the below string values will contain the randomly-generated options and the traits
 		String likedLetter = null;
 		String dislikedLetter = null;
 		String goodPresent = null;
@@ -261,7 +262,7 @@ public class MainGame {
 				+ "became friends. As luck would have it, " + date + " lives near your place, so you "
 				+ "and him often hang out after work.");	
 		
-		// create a new array of questions
+		// create a new array of answers for the question
 		String[] questions = {"a pack of Colombian Arabica coffee","a kitten","a ticket to a baseball game","a new pair of socks"};
 		// ask a question and give an array of possible answers
 		Integer selection = dialogueBox.addQuestionaire("Months flew by, and today it is " + date + "'s birthday. You want to give him something special."
@@ -284,7 +285,7 @@ public class MainGame {
 			a.newEvent(names[0], 1, 1);
 		}
 
-		// create a new array of questions
+		// create a new array of answers for the question
 		String[] questions2 = {"ice skating rink", "aquarium", "Starbucks roastery","cinema"};
 		// ask a question and give an array of possible answers
 		Integer selection2 = dialogueBox.addQuestionaire("Not long after, you propose to " + date + " that the two of you go on a date. "
