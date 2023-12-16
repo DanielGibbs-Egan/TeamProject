@@ -139,7 +139,7 @@ public class MainGame {
 
 		// add dialogue to the box
 
-		dialogueBox.addDialogue("Welcome! Your story will start from here.");	
+		dialogueBox.addDialogue("Welcome! Your story starts here.");	
 
 		//dialogueBox.addDialogue("Hello World!, Dialogue Text Box Testing! Hello World!, Dialogue Text Box Testing!");	
 
