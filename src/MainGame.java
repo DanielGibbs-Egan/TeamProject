@@ -157,7 +157,7 @@ public class MainGame {
 		
 		int randomCandidate = selection0;
 		String date = names[randomCandidate];
-		// the below string values will contain the randomly-generated options and the traits
+		// the below variables will contain the randomly-generated traits and the answers associated with that trait
 		String likedLetter = null;
 		String dislikedLetter = null;
 		String goodPresent = null;
